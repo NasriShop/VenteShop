@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: zoubirnasrishop
+    runtime: static
+    buildCommand: echo "no build"
+    staticPublishPath: .
+    headers:
+      - path: /sw.js
+        name: Cache-Control
+        value: no-cache
+      - path: /*
+        name: X-Frame-Options
+        value: SAMEORIGIN
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin

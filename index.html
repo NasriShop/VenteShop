@@ -1,0 +1,1932 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ZoubirNasriShop — متجر إلكتروني</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = { corePlugins: { preflight: true } };
+</script>
+<style>
+:root{
+  --bg:#FFF8F1; --surface:#FFFFFF; --surface-2:#FFF1E1;
+  --ink:#241539; --muted:#78698A; --line:#F1E1CE;
+  --brand:#FF6A00; --brand-soft:#FFE7CC; --brand-ink:#C74E00;
+  --accent:#8B2FE0; --accent-soft:#F1E3FC; --accent-ink:#6B1FB0;
+  --gold:#FFB800; --gold-soft:#FFF2CC;
+  --grad:linear-gradient(135deg,var(--brand),var(--accent));
+  --shadow:0 1px 2px rgba(36,21,57,.07), 0 10px 26px -12px rgba(36,21,57,.22);
+  box-sizing:border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#181022; --surface:#231732; --surface-2:#2C1F40;
+    --ink:#F6EFFF; --muted:#B6A6CC; --line:#392B4D;
+    --brand:#FF8A3D; --brand-soft:#3A2412; --brand-ink:#FFB37A;
+    --accent:#B98CFF; --accent-soft:#2C2145; --accent-ink:#D8C2FF;
+    --gold:#FFCB4D; --gold-soft:#3A2E0E;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -14px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#181022; --surface:#231732; --surface-2:#2C1F40;
+  --ink:#F6EFFF; --muted:#B6A6CC; --line:#392B4D;
+  --brand:#FF8A3D; --brand-soft:#3A2412; --brand-ink:#FFB37A;
+  --accent:#B98CFF; --accent-soft:#2C2145; --accent-ink:#D8C2FF;
+  --gold:#FFCB4D; --gold-soft:#3A2E0E;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -14px rgba(0,0,0,.7);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top: calc(72px + env(safe-area-inset-top, 0px)); -webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:"Cairo","Outfit",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:16px; line-height:1.65; overflow-x:hidden;
+}
+html[dir="ltr"] body{font-family:"Outfit","Cairo",system-ui,sans-serif}
+h1,h2,h3{line-height:1.25; margin:0; font-weight:800; letter-spacing:-.01em}
+img{max-width:100%; display:block}
+button,input,select,textarea{font:inherit; color:inherit}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--brand); outline-offset:2px; border-radius:6px}
+::selection{background:var(--brand); color:#fff}
+
+/* ---------- shared bits ---------- */
+.wrap{width:100%; max-width:1180px; margin-inline:auto; padding-inline:16px}
+.card{background:var(--surface); border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow)}
+.btn{display:inline-flex; align-items:center; justify-content:center; gap:8px; border:1px solid transparent;
+  border-radius:999px; padding:11px 20px; font-weight:700; cursor:pointer; background:var(--surface-2); color:var(--ink);
+  transition:transform .12s ease, background .18s ease, box-shadow .18s ease}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--brand); color:#fff; box-shadow:0 6px 18px -8px var(--brand)}
+.btn-primary:hover{background:var(--brand-ink)}
+.btn-accent{background:var(--accent); color:#fff; box-shadow:0 8px 22px -10px var(--accent)}
+.btn-ghost{background:transparent; border-color:var(--line)}
+.btn-sm{padding:7px 14px; font-size:.85rem}
+.field{width:100%; background:var(--surface); border:1.5px solid var(--line); border-radius:14px; padding:12px 14px;
+  transition:border-color .15s ease, box-shadow .15s ease}
+.field:focus{border-color:var(--brand); box-shadow:0 0 0 4px var(--brand-soft); outline:none}
+label.lbl{display:block; font-size:.82rem; font-weight:700; color:var(--muted); margin-bottom:6px}
+.price{font-family:"Outfit","Cairo",sans-serif; font-weight:800; font-variant-numeric:tabular-nums}
+.badge{display:inline-flex; align-items:center; gap:6px; background:var(--brand-soft); color:var(--brand-ink);
+  border-radius:999px; padding:4px 12px; font-size:.78rem; font-weight:700}
+.badge-accent{background:var(--accent-soft); color:var(--accent)}
+.hidden{display:none !important}
+
+/* ---------- orders dashboard: stats & filters ---------- */
+.stat-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-bottom:16px}
+.stat-card{position:relative; overflow:hidden; background:var(--surface); border:1px solid var(--line);
+  border-radius:18px; padding:16px 18px 14px; box-shadow:var(--shadow);
+  transition:transform .15s ease, box-shadow .15s ease}
+.stat-card:hover{transform:translateY(-3px); box-shadow:0 16px 32px -16px rgba(15,31,27,.28)}
+.stat-card::before{content:""; position:absolute; inset-inline-start:0; top:0; bottom:0; width:5px;
+  background:var(--stat-c, var(--brand))}
+.stat-icon{font-size:1.25rem; line-height:1; display:block; margin-bottom:10px}
+.stat-label{font-size:.78rem; font-weight:700; color:var(--muted); margin-bottom:4px}
+.stat-value{font-family:"Outfit","Cairo",sans-serif; font-weight:900; font-size:1.55rem;
+  color:var(--stat-c, var(--ink))}
+.filter-bar{display:flex; align-items:center; gap:10px; flex-wrap:wrap; background:var(--surface);
+  border:1px solid var(--line); border-radius:18px; padding:12px 14px; margin-bottom:16px; box-shadow:var(--shadow)}
+.seg{display:flex; background:var(--surface-2); border-radius:999px; padding:3px; gap:2px}
+.seg button{border:none; background:transparent; padding:8px 16px; border-radius:999px; font-weight:700;
+  font-size:.85rem; cursor:pointer; color:var(--muted); transition:background .15s ease, color .15s ease}
+.seg button.on{background:var(--brand); color:#fff; box-shadow:0 4px 12px -4px var(--brand)}
+.filter-bar input[type="date"]{background:var(--surface); border:1.5px solid var(--line); border-radius:12px;
+  padding:8px 10px; font-size:.85rem; color:var(--ink)}
+.status-pill{display:inline-flex; align-items:center; gap:6px; padding:5px 12px; border-radius:999px;
+  font-size:.78rem; font-weight:800}
+.scroll-x{overflow-x:auto; -webkit-overflow-scrolling:touch}
+.muted{color:var(--muted)}
+
+/* ---------- header ---------- */
+header.topbar{position:relative; position:sticky; top:env(safe-area-inset-top, 0px); z-index:50;
+  background:color-mix(in srgb, var(--surface) 88%, transparent); backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line)}
+header.topbar::after{content:""; position:absolute; inset-inline:0; bottom:-2px; height:2px; background:var(--grad)}
+.logo{display:flex; align-items:center; gap:10px; cursor:pointer; user-select:none}
+.logo-mark{width:38px; height:38px; border-radius:12px; background:var(--grad);
+  color:#fff; display:grid; place-items:center; font-family:"Outfit",sans-serif; font-weight:800; font-size:1.05rem;
+  box-shadow:0 6px 16px -6px var(--brand)}
+.logo-txt{font-family:"Outfit",sans-serif; font-weight:800; font-size:1.02rem; letter-spacing:-.02em}
+.logo-txt span{color:var(--accent)}
+.lang-pill{display:flex; background:var(--surface-2); border-radius:999px; padding:3px; gap:2px}
+.lang-pill button{border:0; background:transparent; border-radius:999px; padding:5px 11px; font-size:.78rem; font-weight:700;
+  cursor:pointer; color:var(--muted)}
+.lang-pill button[aria-pressed="true"]{background:var(--surface); color:var(--brand); box-shadow:var(--shadow)}
+
+/* ---------- hero ---------- */
+.hero{position:relative; border-radius:28px; overflow:hidden; background:var(--surface); border:1px solid var(--line);
+  box-shadow:var(--shadow)}
+.hero-grid{display:grid; grid-template-columns:1fr; gap:0}
+@media(min-width:820px){ .hero-grid{grid-template-columns:1.05fr .95fr} }
+.hero-media{position:relative; background:var(--surface-2); aspect-ratio:4/3; overflow:hidden}
+.hero-media img{width:100%; height:100%; object-fit:cover}
+.hero-body{padding:26px 22px 28px; display:flex; flex-direction:column; justify-content:center; gap:14px}
+@media(min-width:820px){ .hero-body{padding:40px 38px} .hero-media{aspect-ratio:auto; min-height:420px} }
+.hero-title{font-size:clamp(1.55rem,4.6vw,2.5rem)}
+.strike{color:var(--muted); text-decoration:line-through; font-weight:600}
+
+/* ---------- product grid ---------- */
+.grid-products{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px}
+@media(min-width:680px){ .grid-products{grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px} }
+@media(min-width:1000px){ .grid-products{grid-template-columns:repeat(4,minmax(0,1fr))} }
+.pcard{background:var(--surface); border:1px solid var(--line); border-radius:20px; overflow:hidden; cursor:pointer;
+  display:flex; flex-direction:column; transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease}
+.pcard:hover{transform:translateY(-3px); box-shadow:var(--shadow); border-color:color-mix(in srgb,var(--brand) 40%,var(--line))}
+.pcard-media{position:relative; aspect-ratio:1/1; background:var(--surface-2); overflow:hidden}
+.pcard-media img{width:100%; height:100%; object-fit:cover; transition:transform .5s cubic-bezier(.2,.7,.3,1)}
+.pcard:hover .pcard-media img{transform:scale(1.07)}
+.pcard-body{padding:11px 13px 14px; display:flex; flex-direction:column; gap:6px; flex:1}
+.pcard-name{font-weight:700; font-size:.95rem; line-height:1.4;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
+.ribbon{position:absolute; inset-inline-start:10px; top:10px; z-index:2}
+
+/* ---------- product landing ---------- */
+.gallery{display:flex; flex-direction:column; gap:14px}
+.gimg{width:100%; border-radius:22px; overflow:hidden; background:var(--surface-2); border:1px solid var(--line)}
+.gimg img{width:100%; height:auto; object-fit:contain; cursor:zoom-in; transition:transform .45s cubic-bezier(.2,.7,.3,1)}
+.gimg.zoomed img{transform:scale(1.9); cursor:zoom-out}
+.desc-html{line-height:1.9; max-width:100%; overflow-wrap:anywhere}
+.desc-html img{max-width:100%; height:auto; border-radius:16px; margin:12px auto; display:block}
+.desc-html h2,.desc-html h3{margin:18px 0 8px; font-size:1.15rem}
+.desc-html ul{padding-inline-start:22px; margin:10px 0}
+.desc-html li{margin:5px 0}
+.desc-html p{margin:10px 0}
+.desc-html table{border-collapse:collapse; width:100%; min-width:0}
+.desc-html td,.desc-html th{border:1px solid var(--line); padding:7px 10px; font-size:.9rem}
+.desc-html .tbl-wrap{max-width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; border-radius:10px}
+.desc-html iframe,.desc-html video{max-width:100%; width:100%; aspect-ratio:16/9; border:0; border-radius:16px}
+.desc-html pre{max-width:100%; overflow-x:auto}
+.desc-html *{max-width:100%}
+
+/* description content comes from admin-pasted HTML that may ship its own
+   full page (<style>, fixed widths, <div id="root">…). Rendering it inline
+   let that CSS leak onto the whole storefront and break the layout on every
+   screen size — see the isolated-frame fix in mountDescFrame(). The frame
+   itself is width:100% and its height is measured and re-applied from JS so
+   it always matches its content, on phone and desktop alike. */
+.desc-frame-wrap{width:100%; max-width:100%; overflow:hidden}
+.desc-frame{display:block; width:100%; border:0; background:transparent; min-height:60px}
+
+/* ---------- category filter ---------- */
+.cat-bar{display:flex; gap:10px; overflow-x:auto; -webkit-overflow-scrolling:touch; padding:2px 2px 10px}
+.cat-pill{display:flex; align-items:center; gap:7px; white-space:nowrap; flex:0 0 auto; cursor:pointer;
+  border:1.5px solid var(--line); background:var(--surface); border-radius:999px; padding:9px 16px;
+  font-weight:700; font-size:.86rem; color:var(--ink); transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease}
+.cat-pill:hover{transform:translateY(-2px)}
+.cat-pill .ic{font-size:1.05rem; line-height:1}
+.cat-pill[data-on="1"]{background:var(--grad); color:#fff; border-color:transparent; box-shadow:0 8px 18px -8px var(--brand)}
+.order-box{position:relative}
+@media(min-width:960px){
+  .pdp{display:grid; grid-template-columns:1.15fr .85fr; gap:30px; align-items:start}
+  .order-box{position:sticky; top:96px}
+}
+.radio-card{display:flex; align-items:center; gap:10px; border:1.5px solid var(--line); border-radius:16px; padding:12px 14px;
+  cursor:pointer; background:var(--surface); flex:1; transition:border-color .15s, background .15s}
+.radio-card[data-on="1"]{border-color:var(--brand); background:var(--brand-soft)}
+.qty{display:flex; align-items:center; gap:0; border:1.5px solid var(--line); border-radius:999px; overflow:hidden; width:fit-content}
+.qty button{width:40px; height:40px; border:0; background:var(--surface-2); font-size:1.1rem; font-weight:800; cursor:pointer}
+.qty span{min-width:48px; text-align:center; font-weight:800}
+
+/* ---------- floating contact ---------- */
+.floaties{position:fixed; inset-inline-end:14px; bottom:calc(16px + env(safe-area-inset-bottom,0px)); z-index:60;
+  display:flex; flex-direction:column; gap:10px}
+.fab{width:52px; height:52px; border-radius:50%; display:grid; place-items:center; color:#fff; box-shadow:0 10px 26px -8px rgba(0,0,0,.45);
+  border:0; cursor:pointer; transition:transform .15s ease}
+.fab:hover{transform:translateY(-2px) scale(1.05)}
+.fab-wa{background:#25D366}
+.fab-fb{background:#1877F2}
+
+/* ---------- admin ---------- */
+.tabs{display:flex; gap:6px; overflow-x:auto; padding-bottom:4px}
+.tabs button{white-space:nowrap; border:1px solid var(--line); background:var(--surface); border-radius:999px;
+  padding:8px 16px; font-weight:700; font-size:.88rem; cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--brand); color:#fff; border-color:var(--brand)}
+table.tbl{width:100%; border-collapse:collapse; font-size:.88rem; min-width:720px}
+table.tbl th{text-align:start; font-size:.76rem; color:var(--muted); font-weight:700; padding:10px; border-bottom:1px solid var(--line)}
+table.tbl td{padding:10px; border-bottom:1px solid var(--line); vertical-align:top}
+table.tbl tr:hover td{background:var(--surface-2)}
+.toast{position:fixed; inset-inline:0; bottom:calc(22px + env(safe-area-inset-bottom,0px)); z-index:200;
+  display:flex; justify-content:center; pointer-events:none}
+.toast>div{background:var(--ink); color:var(--bg); padding:11px 20px; border-radius:999px; font-weight:700; font-size:.9rem;
+  box-shadow:var(--shadow); max-width:90vw}
+.modal{position:fixed; inset:0; z-index:150; background:rgba(8,16,14,.55); display:grid; place-items:center; padding:16px;
+  backdrop-filter:blur(3px)}
+.modal-panel{background:var(--surface); border-radius:24px; width:100%; max-width:640px; max-height:88vh; overflow:auto;
+  border:1px solid var(--line); box-shadow:var(--shadow)}
+.spinner{width:18px;height:18px;border:2.5px solid rgba(255,255,255,.35); border-top-color:#fff; border-radius:50%;
+  animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.skel{background:linear-gradient(90deg,var(--surface-2),var(--line),var(--surface-2)); background-size:200% 100%;
+  animation:sh 1.3s infinite; border-radius:16px}
+@keyframes sh{0%{background-position:200% 0}100%{background-position:-200% 0}}
+@media (prefers-reduced-motion: reduce){ *{animation-duration:.01ms !important; transition-duration:.01ms !important} }
+.trust{display:grid; grid-template-columns:repeat(2,1fr); gap:10px}
+@media(min-width:760px){ .trust{grid-template-columns:repeat(4,1fr)} }
+.trust>div{display:flex; align-items:center; gap:10px; background:var(--surface); border:1px solid var(--line);
+  border-radius:16px; padding:12px 14px; font-size:.86rem; font-weight:700}
+footer.site{background:var(--surface); border-top:1px solid var(--line); margin-top:56px;
+  padding:34px 0 calc(90px + env(safe-area-inset-bottom,0px))}
+</style>
+
+<!-- ==========================================================================
+     ① إعدادات Firebase — الصق هنا القيم من console.firebase.google.com
+        (Project settings → Your apps → Web app → firebaseConfig)
+        إذا تركتها كما هي، يعمل المتجر في الوضع المحلي (هذا المتصفح فقط).
+     ========================================================================== -->
+<script>
+window.FIREBASE_CONFIG = {
+  apiKey:            "AIzaSyDInmjbf1LTX5WtS1wj-pgP7YfuA_v9_gc",
+  authDomain:        "zoubir-vente.firebaseapp.com",
+  projectId:         "zoubir-vente",
+  storageBucket:     "zoubir-vente.firebasestorage.app",
+  messagingSenderId: "719996313497",
+  appId:             "1:719996313497:web:4486f8d111d04455d8bd08"
+};
+/* ② رابط Google Apps Script لأرشفة الطلبات تلقائياً (اتركه فارغاً لتعطيله) */
+window.SHEETS_URL = "";
+
+/* ③ Cloudinary — تخزين الصور خارج قاعدة البيانات (مجاني حتى 25GB).
+   1) أنشئ حساباً مجانياً على https://cloudinary.com
+   2) من Dashboard انسخ "Cloud name" وضعه في CLOUD_NAME
+   3) Settings → Upload → Add upload preset → Signing Mode: Unsigned → احفظ اسمه في UPLOAD_PRESET
+   اتركهما فارغين للعودة إلى الرفع المحلي (base64) كبديل احتياطي فقط. */
+window.CLOUDINARY = {
+  CLOUD_NAME: "hwhhltic",
+  UPLOAD_PRESET: "zoubirnasrishop"
+};
+/* ④ معرّف هذه النسخة من المتجر. كل نسخة تأخذ اسماً مختلفاً (main, shop2, shop3 …)
+   والمنتجات مشتركة بين كل النسخ، لكن ترتيب المنتجات والمنتج المميز خاص بكل معرّف.
+   يمكن تجاوزه من الرابط: ?s=shop2 */
+window.STORE_ID = "main";
+</script>
+
+<!-- ③ Facebook Pixel — ضع رقم البكسل مكان PIXEL_ID ثم أزل التعليق
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init','PIXEL_ID'); fbq('track','PageView');
+</script>
+-->
+
+<!-- ④ TikTok Pixel — ضع رقم البكسل مكان TIKTOK_PIXEL_ID ثم أزل التعليق
+<script>
+!function(w,d,t){w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie"];ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e};ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js";ttq._i=ttq._i||{};ttq._i[e]=[];ttq._i[e]._u=r;ttq._t=ttq._t||{};ttq._t[e]=+new Date;ttq._o=ttq._o||{};ttq._o[e]=n||{};var o=d.createElement("script");o.type="text/javascript";o.async=!0;o.src=r+"?sdkid="+e+"&lib="+t;var a=d.getElementsByTagName("script")[0];a.parentNode.insertBefore(o,a)};
+ttq.load('TIKTOK_PIXEL_ID'); ttq.page();
+}(window,document,'ttq');
+</script>
+-->
+
+<!-- ⑤ Firebase SDK (يُحمَّل فقط إذا تم ملء الإعدادات) -->
+<script type="module">
+  const c = window.FIREBASE_CONFIG || {};
+  if (c.apiKey && !String(c.apiKey).includes("PASTE")) {
+    const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js");
+    const fs = await import("https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js");
+    const app = initializeApp(c);
+    const db  = fs.getFirestore(app);
+    window.FB = {
+      docRef: p => fs.doc(db, p),
+      colRef: p => fs.collection(db, p),
+      getDoc: fs.getDoc, setDoc: fs.setDoc, updateDoc: fs.updateDoc, deleteDoc: fs.deleteDoc,
+      getDocs: fs.getDocs, onSnapshot: fs.onSnapshot, query: fs.query,
+      orderBy: fs.orderBy, limit: fs.limit
+    };
+  }
+  window.__fbDone = true;
+  window.dispatchEvent(new Event("fb-ready"));
+</script>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap" style="display:flex; align-items:center; gap:12px; height:66px">
+    <div class="logo" onclick="go('home')">
+      <div class="logo-mark">ZN</div>
+      <div>
+        <div class="logo-txt">Zoubir<span>Nasri</span>Shop</div>
+        <div class="muted" style="font-size:.68rem; margin-top:-4px" id="tagline">الدفع عند الاستلام · 58 ولاية</div>
+      </div>
+    </div>
+    <div style="flex:1"></div>
+    <div class="lang-pill" id="langPill">
+      <button data-lang="ar" aria-pressed="true">ع</button>
+      <button data-lang="fr" aria-pressed="false">FR</button>
+      <button data-lang="en" aria-pressed="false">EN</button>
+    </div>
+    <button class="btn btn-ghost btn-sm" onclick="go('admin')" id="adminBtn" title="Admin">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6h.09A1.65 1.65 0 0 0 10 3.09V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      <span data-i18n="admin"></span>
+    </button>
+  </div>
+</header>
+
+<main id="app" class="wrap" style="padding-top:18px; min-height:60vh"></main>
+
+<footer class="site">
+  <div class="wrap" style="display:grid; gap:26px; grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+    <div>
+      <div class="logo" style="cursor:default"><div class="logo-mark">ZN</div>
+        <div class="logo-txt">Zoubir<span>Nasri</span>Shop</div></div>
+      <p class="muted" style="font-size:.88rem; margin-top:10px" data-i18n="footerAbout"></p>
+    </div>
+    <div>
+      <h3 style="font-size:.95rem; margin-bottom:10px" data-i18n="contactUs"></h3>
+      <p style="font-size:.9rem; margin:4px 0">
+        <a href="https://wa.me/213542248858" target="_blank" rel="noopener">WhatsApp · 0542248858</a></p>
+      <p style="font-size:.9rem; margin:4px 0">
+        <a href="https://www.facebook.com/profile.php?id=61578436251516" target="_blank" rel="noopener">Facebook · ZoubirNasriShop</a></p>
+    </div>
+    <div>
+      <h3 style="font-size:.95rem; margin-bottom:10px" data-i18n="payDelivery"></h3>
+      <p class="muted" style="font-size:.88rem" data-i18n="footerShip"></p>
+      <p style="font-size:.86rem; margin:10px 0 0">
+        <a href="#" onclick="go('policy','privacy');return false">سياسة الخصوصية</a> ·
+        <a href="#" onclick="go('policy','returns');return false">الاستبدال والإرجاع</a></p>
+    </div>
+  </div>
+  <div class="wrap" style="margin-top:24px; padding-top:16px; border-top:1px solid var(--line);
+      display:flex; flex-wrap:wrap; gap:10px; justify-content:space-between; font-size:.8rem">
+    <span class="muted">© <span id="yr"></span> ZoubirNasriShop — <span data-i18n="rights"></span></span>
+    <span class="muted">Algeria · Cash on Delivery</span>
+  </div>
+</footer>
+
+<div class="floaties">
+  <a class="fab fab-wa" href="https://wa.me/213542248858" target="_blank" rel="noopener" aria-label="WhatsApp">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.76-1.66-2.06-.17-.3-.02-.46.13-.61.14-.14.3-.35.45-.53.15-.18.2-.3.3-.5.1-.2.05-.38-.02-.53-.08-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.38-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.22 3.08c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.63.71.22 1.36.19 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.69.25-1.28.17-1.41-.07-.13-.27-.2-.57-.35zM12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.87 9.87 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm0 18.13h-.01c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.22 8.22 0 0 1-1.26-4.36c0-4.54 3.7-8.23 8.25-8.23 2.2 0 4.27.86 5.83 2.42a8.19 8.19 0 0 1 2.41 5.82c0 4.54-3.7 8.21-8.23 8.21z"/></svg>
+  </a>
+  <a class="fab fab-fb" href="https://www.facebook.com/profile.php?id=61578436251516" target="_blank" rel="noopener" aria-label="Facebook">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.9h2.54V9.85c0-2.52 1.5-3.91 3.77-3.91 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.78-1.63 1.57v1.89h2.78l-.44 2.9h-2.34V22C18.34 21.24 22 17.08 22 12.06z"/></svg>
+  </a>
+</div>
+
+<div id="toastHost"></div>
+<div id="modalHost"></div>
+<script>
+/* =========================================================================
+   ZoubirNasriShop — Single-file storefront + admin (Algeria, COD)
+   Data layer: Claude `db` capability (cloud) with localStorage fallback.
+   ========================================================================= */
+
+/* ------------------------ 1. Algeria geo database ------------------------ */
+/* [code, nameAr, nameLatin, [communes...]] — communes are written in Latin
+   script because that is what Algerian delivery companies use on labels.    */
+const DZ = [
+[1,"أدرار","Adrar",["Adrar","Reggane","Fenoughil","Zaouiet Kounta","Tsabit","Bouda","Tamest","In Zghmir","Aoulef","Tamantit"]],
+[2,"الشلف","Chlef",["Chlef","Ténès","Ouled Fares","Boukadir","Oued Fodda","El Karimia","Abou El Hassan","Beni Haoua","Chettia","Sobha","Zeboudja","Ain Merane"]],
+[3,"الأغواط","Laghouat",["Laghouat","Aflou","Ksar El Hirane","Ain Madhi","Hassi R'Mel","Brida","El Assafia","Gueltat Sidi Saad","Sidi Makhlouf"]],
+[4,"أم البواقي","Oum El Bouaghi",["Oum El Bouaghi","Ain Beida","Ain M'lila","Ain Fakroun","Ain Kercha","Meskiana","Sigus","F'kirina","Souk Naamane"]],
+[5,"باتنة","Batna",["Batna","Barika","Merouana","Arris","N'Gaous","Ain Touta","Tazoult","Seggana","Timgad","Ras El Aioun","Chemora","Bouzina"]],
+[6,"بجاية","Béjaïa",["Béjaïa","Akbou","El Kseur","Amizour","Sidi Aich","Kherrata","Tichy","Aokas","Souk El Tenine","Seddouk","Tazmalt","Darguina","Barbacha","Adekar"]],
+[7,"بسكرة","Biskra",["Biskra","Tolga","Ouled Djellal*","Sidi Okba","El Kantara","Zeribet El Oued","Djemorah","Lioua","Mchouneche","Ourlal","El Outaya","Foughala"]],
+[8,"بشار","Béchar",["Béchar","Kenadsa","Abadla","Taghit","Béni Ounif","Lahmar","Boukais","Mogheul"]],
+[9,"البليدة","Blida",["Blida","Boufarik","Bougara","Larbaa","Ouled Yaich","Mouzaia","El Affroun","Meftah","Beni Tamou","Soumaa","Chebli","Oued Alleug","Chrea","Bouinan"]],
+[10,"البويرة","Bouira",["Bouira","Lakhdaria","Sour El Ghozlane","M'Chedallah","Ain Bessem","Bechloul","Kadiria","Bordj Okhriss","El Hachimia","Haizer","Djebahia","Ahnif"]],
+[11,"تمنراست","Tamanrasset",["Tamanrasset","Abalessa","In Ghar","Idles","Tazrouk","In Amguel"]],
+[12,"تبسة","Tébessa",["Tébessa","Bir El Ater","Cheria","El Aouinet","Morsott","Ouenza","El Kouif","Negrine","Bekkaria","Hammamet"]],
+[13,"تلمسان","Tlemcen",["Tlemcen","Maghnia","Ghazaouet","Remchi","Sebdou","Nedroma","Hennaya","Chetouane","Mansourah","Ouled Mimoun","Sabra","Bensekrane","Marsa Ben M'Hidi","Beni Saf*"]],
+[14,"تيارت","Tiaret",["Tiaret","Frenda","Sougueur","Ksar Chellala","Mahdia","Rahouia","Ain Deheb","Medroussa","Dahmouni","Oued Lilli","Hamadia"]],
+[15,"تيزي وزو","Tizi Ouzou",["Tizi Ouzou","Azazga","Draa Ben Khedda","Larbaa Nath Irathen","Boghni","Tigzirt","Azeffoun","Draa El Mizan","Ain El Hammam","Ouaguenoun","Mekla","Freha","Maatkas","Beni Douala","Tizi Ghenif"]],
+[16,"الجزائر","Alger",["Alger Centre","Bab Ezzouar","Bir Mourad Rais","Hussein Dey","El Harrach","Dar El Beida","Draria","Cheraga","Ain Benian","Bordj El Kiffan","Baraki","Birtouta","Rouiba","Reghaia","Zeralda","Kouba","El Biar","Bologhine","Hydra","Staoueli","Douera","Bab El Oued","Bachdjarah","Saoula","Sidi Moussa","El Madania","Dely Ibrahim"]],
+[17,"الجلفة","Djelfa",["Djelfa","Ain Oussera","Hassi Bahbah","Messaad","El Idrissia","Birine","Charef","Ain El Ibel","Dar Chioukh","Had Sahary","Sidi Ladjel"]],
+[18,"جيجل","Jijel",["Jijel","Taher","El Milia","Chekfa","El Aouana","Texenna","Settara","Sidi Abdelaziz","Ziama Mansouriah","Djimla"]],
+[19,"سطيف","Sétif",["Sétif","El Eulma","Ain Oulmene","Ain Azel","Bougaa","Ain Arnat","Ain Kebira","Beni Aziz","Djemila","Guidjel","Salah Bey","Hammam Sokhna","Bouandas","El Ouricia","Amoucha","Ain El Kebira","Babor","Bir El Arch","Guenzet","Tala Ifacene"]],
+[20,"سعيدة","Saïda",["Saïda","Ain El Hadjar","Ouled Brahim","Youb","Hassasna","Sidi Boubekeur","El Hassasna","Ain Sekhouna"]],
+[21,"سكيكدة","Skikda",["Skikda","Collo","Azzaba","El Harrouch","Tamalous","Ramdane Djamel","Ain Charchar","Filfila","Ben Azzouz","El Hadaiek","Zitouna"]],
+[22,"سيدي بلعباس","Sidi Bel Abbès",["Sidi Bel Abbès","Telagh","Sfisef","Ben Badis","Ras El Ma","Mostefa Ben Brahim","Ain El Berd","Sidi Lahcene","Tessala","Marhoum"]],
+[23,"عنابة","Annaba",["Annaba","El Bouni","El Hadjar","Berrahal","Sidi Amar","Seraidi","Ain Berda","Chetaibi","Treat"]],
+[24,"قالمة","Guelma",["Guelma","Oued Zenati","Bouchegouf","Heliopolis","Hammam Debagh","Ain Makhlouf","Khezaras","Hammam N'Bail","Medjez Amar"]],
+[25,"قسنطينة","Constantine",["Constantine","El Khroub","Ain Smara","Hamma Bouziane","Didouche Mourad","Zighoud Youcef","Ain Abid","Ibn Ziad","Beni Hamiden"]],
+[26,"المدية","Médéa",["Médéa","Berrouaghia","Ksar El Boukhari","Ouzera","Beni Slimane","Tablat","El Omaria","Ain Boucif","Chellalet El Adhaoura","Sidi Naamane","Ouamri"]],
+[27,"مستغانم","Mostaganem",["Mostaganem","Ain Tedles","Hassi Mameche","Sidi Ali","Bouguirat","Achaacha","Mesra","Kheir Eddine","Sidi Lakhdar","Mazagran"]],
+[28,"المسيلة","M'Sila",["M'Sila","Bou Saada","Sidi Aissa","Magra","Ain El Melh","Hammam Dhalaa","Ouled Derradj","Chellal","Djebel Messaad","Medjedel","Berhoum"]],
+[29,"معسكر","Mascara",["Mascara","Sig","Mohammadia","Tighennif","Ghriss","Bouhanifia","Oued El Abtal","Ain Fares","Hacine","Zahana","El Bordj"]],
+[30,"ورقلة","Ouargla",["Ouargla","Hassi Messaoud","Rouissat","N'Goussa","Sidi Khouiled","El Borma","Ain Beida","Hassi Ben Abdallah"]],
+[31,"وهران","Oran",["Oran","Es Senia","Bir El Djir","Arzew","Ain El Turk","Gdyel","Bethioua","Boutlelis","Misserghin","Oued Tlelat","Hassi Bounif","Sidi Chami","Mers El Kebir","Hassi Mefsoukh"]],
+[32,"البيض","El Bayadh",["El Bayadh","Bougtoub","Rogassa","El Abiodh Sidi Cheikh","Brezina","Labiodh","Chellala","Ain El Orak"]],
+[33,"إليزي","Illizi",["Illizi","In Amenas","Debdeb","Bordj Omar Driss"]],
+[34,"برج بوعريريج","Bordj Bou Arreridj",["Bordj Bou Arreridj","Ras El Oued","Mansoura","Bordj Ghedir","El Achir","Djaafra","Medjana","Ain Taghrout","El Hamadia","Bir Kasdali"]],
+[35,"بومرداس","Boumerdès",["Boumerdès","Boudouaou","Dellys","Bordj Menaiel","Khemis El Khechna","Naciria","Thenia","Isser","Zemmouri","Corso","Ouled Moussa","Baghlia","Tidjelabine"]],
+[36,"الطارف","El Tarf",["El Tarf","El Kala","Dréan","Besbes","Bouhadjar","Ben M'Hidi","Bouteldja","Chebaita Mokhtar","Zerizer"]],
+[37,"تندوف","Tindouf",["Tindouf","Oum El Assel"]],
+[38,"تيسمسيلت","Tissemsilt",["Tissemsilt","Theniet El Had","Bordj Bou Naama","Lardjem","Khemisti","Ammari","Layoune","Bordj Emir Abdelkader"]],
+[39,"الوادي","El Oued",["El Oued","Guemar","Debila","Robbah","Magrane","Hassani Abdelkrim","Taghzout","Bayadha","Reguiba","Hassi Khalifa","Djamaa*","Kouinine"]],
+[40,"خنشلة","Khenchela",["Khenchela","Kais","Chechar","El Hamma","Bouhmama","Ouled Rechache","Ain Touila","Babar"]],
+[41,"سوق أهراس","Souk Ahras",["Souk Ahras","Sedrata","M'Daourouch","Taoura","Hanancha","Ouled Driss","Mechroha","Bir Bouhouche"]],
+[42,"تيبازة","Tipaza",["Tipaza","Koléa","Cherchell","Hadjout","Fouka","Bou Ismail","Ahmer El Ain","Damous","Gouraya","Douaouda","Sidi Amar","Menaceur"]],
+[43,"ميلة","Mila",["Mila","Chelghoum Laid","Ferdjioua","Grarem Gouga","Oued Athmania","Teleghma","Tassadane Haddada","Rouached","Sidi Merouane","Bouhatem"]],
+[44,"عين الدفلى","Aïn Defla",["Aïn Defla","Khemis Miliana","Miliana","El Attaf","Djelida","Bordj Emir Khaled","Rouina","Ain Lechiakh","El Amra","Hammam Righa","Bathia"]],
+[45,"النعامة","Naâma",["Naâma","Mécheria","Ain Sefra","Sfissifa","Moghrar","Tiout","Asla"]],
+[46,"عين تموشنت","Aïn Témouchent",["Aïn Témouchent","Beni Saf","El Malah","Hammam Bouhadjar","El Amria","Ain Kihal","Oulhaca","Chaabat El Leham","Terga"]],
+[47,"غرداية","Ghardaïa",["Ghardaïa","Metlili","El Atteuf","Berriane","Bounoura","Daya Ben Dahoua","Guerrara","Zelfana","Mansoura"]],
+[48,"غليزان","Relizane",["Relizane","Oued Rhiou","Mazouna","Zemmoura","Ammi Moussa","Sidi M'Hamed Ben Ali","Mendes","Yellel","El Hamadna","Djidiouia"]],
+[49,"تيميمون","Timimoun",["Timimoun","Aougrout","Charouine","Tinerkouk","Ouled Said","Metarfa"]],
+[50,"برج باجي مختار","Bordj Badji Mokhtar",["Bordj Badji Mokhtar","Timiaouine"]],
+[51,"أولاد جلال","Ouled Djellal",["Ouled Djellal","Sidi Khaled","Doucen","Chaiba","Ras El Miaad"]],
+[52,"بني عباس","Béni Abbès",["Béni Abbès","Igli","Kerzaz","Ouled Khodeir","El Ouata","Tamtert","Beni Ikhlef"]],
+[53,"عين صالح","In Salah",["In Salah","Foggaret Ezzaouia","In Ghar"]],
+[54,"عين قزام","In Guezzam",["In Guezzam","Tin Zaouatine"]],
+[55,"تقرت","Touggourt",["Touggourt","Témacine","Megarine","Nezla","Zaouia El Abidia","El Hadjira","Taibet","Blidet Amor"]],
+[56,"جانت","Djanet",["Djanet","Bordj El Haouas"]],
+[57,"المغير","El M'Ghair",["El M'Ghair","Djamaa","Sidi Khelil","Still","Oum Touyour","Sidi Amrane"]],
+[58,"المنيعة","El Meniaa",["El Meniaa","Hassi Gara","Hassi Fehal"]]
+];
+
+/* ------------------------------ 2. i18n ------------------------------- */
+const I18N = {
+ar:{
+  dir:"rtl", admin:"لوحة التحكم", tagline:"الدفع عند الاستلام · 58 ولاية",
+  shopNow:"اطلب الآن", buyNow:"اشتري الآن — الدفع عند الاستلام", products:"منتجاتنا",
+  allProducts:"كل المنتجات", featured:"منتج مميّز", off:"تخفيض", da:"دج",
+  searchPh:"ابحث عن منتج…", noProducts:"لا توجد منتجات حالياً. أضف منتجاتك من لوحة التحكم.",
+  back:"رجوع", desc:"وصف المنتج", orderForm:"أكمل الطلب", fullName:"الاسم واللقب",
+  phone:"رقم الهاتف", phone2:"رقم هاتف ثانٍ (اختياري)", wilaya:"الولاية", commune:"البلدية",
+  address:"العنوان بالتفصيل", notes:"ملاحظة (اختياري)", deliveryType:"طريقة التوصيل",
+  home:"التوصيل إلى المنزل", desk:"التوصيل إلى المكتب", qty:"الكمية",
+  subtotal:"سعر المنتج", shipping:"سعر التوصيل", total:"المجموع الكلي",
+  confirm:"تأكيد الطلب", sending:"جارٍ الإرسال…", pickWilaya:"اختر الولاية",
+  pickCommune:"اختر البلدية", other:"أخرى (اكتبها يدوياً)",
+  successTitle:"تم تسجيل طلبك بنجاح ✅", successBody:"سنتصل بك قريباً لتأكيد الطلب. رقم الطلب:",
+  keepShopping:"مواصلة التسوق", contactWa:"تواصل عبر واتساب",
+  required:"يرجى ملء جميع الحقول الإجبارية", badPhone:"رقم الهاتف غير صحيح (9 أو 10 أرقام)",
+  contactUs:"تواصل معنا", payDelivery:"الدفع والتوصيل", rights:"جميع الحقوق محفوظة",
+  footerAbout:"متجر إلكتروني جزائري — منتجات مختارة بعناية، دفع عند الاستلام وتوصيل إلى كل الولايات.",
+  footerShip:"الدفع نقداً عند الاستلام. التوصيل إلى المنزل أو مكتب التوصيل عبر 58 ولاية.",
+  t1:"الدفع عند الاستلام", t2:"توصيل 58 ولاية", t3:"منتجات أصلية", t4:"دعم فوري عبر واتساب",
+  adminLogin:"دخول لوحة التحكم", password:"رمز المرور", login:"دخول", wrongPass:"رمز المرور غير صحيح",
+  tabProducts:"المنتجات", tabOrders:"الطلبات", tabShipping:"أسعار التوصيل", tabAI:"مولّد الإعلانات",
+  tabSettings:"الإعدادات", addProduct:"إضافة منتج", edit:"تعديل", del:"حذف", save:"حفظ",
+  cancel:"إلغاء", name:"اسم المنتج", priceL:"السعر (دج)", oldPrice:"السعر قبل التخفيض (اختياري)",
+  images:"صور المنتج", descHtml:"الوصف (يدعم HTML)", isFeatured:"عرضه في البانر الرئيسي",
+  active:"معروض في المتجر", saved:"تم الحفظ", deleted:"تم الحذف", confirmDel:"هل تريد الحذف نهائياً؟",
+  globalRates:"سعر موحّد لكل الولايات", customRates:"أسعار مخصّصة لكل ولاية", apply:"تطبيق على 58 ولاية",
+  exportCsv:"تصدير Excel (CSV)", archiveSheets:"أرشفة إلى Google Sheets", openSheet:"فتح Google Sheet",
+  statsNote:"إحصائيات إجمالية دائمة — لا تتأثر بحذف أو أرشفة الطلبات", resetStats:"↺ تصفير العداد", status:"الحالة",
+  stPending:"قيد الانتظار", stConfirmed:"مؤكّد", stShipped:"تم الشحن", stDone:"تم التسليم", stCancel:"ملغى",
+  filterAll:"الكل", filterToday:"اليوم", filterFrom:"من", filterTo:"إلى", filterApply:"تطبيق", filterPickDates:"حدد التاريخين أولاً",
+  orderNo:"الطلب", date:"التاريخ", customer:"الزبون", product:"المنتج", actions:"إجراءات",
+  noOrders:"لا توجد طلبات بعد.", aiTitle:"مولّد الإعلانات بالذكاء الاصطناعي",
+  aiDesc:"اختر منتجاً واحصل على نص إعلاني جاهز لحملات فيسبوك وتيك توك.",
+  aiGenerate:"توليد الإعلان", aiCopy:"نسخ النص", copied:"تم النسخ", aiPlatform:"المنصة",
+  aiTone:"الأسلوب", toneHype:"حماسي", toneTrust:"موثوق ومهني", toneStory:"قصة قصيرة",
+  logout:"خروج", storeName:"اسم المتجر", adminPass:"رمز مرور اللوحة", sheetUrl:"رابط Google Apps Script",
+  loading:"جارٍ التحميل…", cloudOn:"متصل بقاعدة البيانات السحابية", cloudOff:"وضع محلي (هذا المتصفح فقط)",
+  viewProduct:"عرض المنتج", stock:"المخزون", sold:"تم بيعها", limited:"كمية محدودة", adLang:"لغة الإعلان",
+  category:"التصنيف", pixelsTitle:"بيكسلات الإعلانات (تتبّع)",
+  fbPixel:"معرّف Facebook Pixel", fbPixelHelp:"يُستعمل لتتبّع زوار موقعك من إعلانات فيسبوك/إنستغرام وقياس نتائج الحملات. يمكنك نسخه من Meta Events Manager.",
+  ttPixel:"معرّف TikTok Pixel", ttPixelHelp:"يُستعمل لتتبّع زوار موقعك من إعلانات تيك توك وقياس نتائج الحملات. يمكنك نسخه من TikTok Ads Manager."
+},
+fr:{
+  dir:"ltr", admin:"Admin", tagline:"Paiement à la livraison · 58 wilayas",
+  shopNow:"Commander", buyNow:"Commander — paiement à la livraison", products:"Nos produits",
+  allProducts:"Tous les produits", featured:"Produit vedette", off:"Remise", da:"DA",
+  searchPh:"Rechercher un produit…", noProducts:"Aucun produit. Ajoutez-en depuis l'admin.",
+  back:"Retour", desc:"Description", orderForm:"Finaliser la commande", fullName:"Nom et prénom",
+  phone:"Téléphone", phone2:"2ᵉ téléphone (optionnel)", wilaya:"Wilaya", commune:"Commune",
+  address:"Adresse complète", notes:"Remarque (optionnel)", deliveryType:"Mode de livraison",
+  home:"Livraison à domicile", desk:"Livraison au bureau", qty:"Quantité",
+  subtotal:"Prix du produit", shipping:"Livraison", total:"Total à payer",
+  confirm:"Confirmer la commande", sending:"Envoi…", pickWilaya:"Choisir la wilaya",
+  pickCommune:"Choisir la commune", other:"Autre (saisir manuellement)",
+  successTitle:"Commande enregistrée ✅", successBody:"Nous vous appellerons pour confirmer. Numéro :",
+  keepShopping:"Continuer les achats", contactWa:"Contacter sur WhatsApp",
+  required:"Merci de remplir les champs obligatoires", badPhone:"Numéro invalide (9 ou 10 chiffres)",
+  contactUs:"Contact", payDelivery:"Paiement & livraison", rights:"Tous droits réservés",
+  footerAbout:"Boutique en ligne algérienne — produits sélectionnés, paiement à la livraison partout.",
+  footerShip:"Paiement en espèces à la réception. Livraison à domicile ou au bureau, 58 wilayas.",
+  t1:"Paiement à la livraison", t2:"58 wilayas", t3:"Produits authentiques", t4:"Support WhatsApp",
+  adminLogin:"Accès administration", password:"Mot de passe", login:"Entrer", wrongPass:"Mot de passe incorrect",
+  tabProducts:"Produits", tabOrders:"Commandes", tabShipping:"Tarifs livraison", tabAI:"Générateur d'annonces",
+  tabSettings:"Réglages", addProduct:"Ajouter un produit", edit:"Modifier", del:"Supprimer", save:"Enregistrer",
+  cancel:"Annuler", name:"Nom du produit", priceL:"Prix (DA)", oldPrice:"Ancien prix (optionnel)",
+  images:"Images", descHtml:"Description (HTML accepté)", isFeatured:"Afficher dans la bannière",
+  active:"Visible en boutique", saved:"Enregistré", deleted:"Supprimé", confirmDel:"Supprimer définitivement ?",
+  globalRates:"Tarif unique pour toutes les wilayas", customRates:"Tarifs par wilaya", apply:"Appliquer aux 58",
+  exportCsv:"Exporter Excel (CSV)", archiveSheets:"Archiver vers Google Sheets", openSheet:"Ouvrir Google Sheet",
+  statsNote:"Statistiques cumulées permanentes — non affectées par la suppression ou l'archivage", resetStats:"↺ Réinitialiser le compteur", status:"Statut",
+  stPending:"En attente", stConfirmed:"Confirmée", stShipped:"Expédiée", stDone:"Livrée", stCancel:"Annulée",
+  filterAll:"Tout", filterToday:"Aujourd'hui", filterFrom:"Du", filterTo:"Au", filterApply:"Appliquer", filterPickDates:"Choisissez les deux dates",
+  orderNo:"Commande", date:"Date", customer:"Client", product:"Produit", actions:"Actions",
+  noOrders:"Aucune commande.", aiTitle:"Générateur d'annonces IA",
+  aiDesc:"Choisissez un produit et obtenez un texte publicitaire prêt pour Facebook et TikTok.",
+  aiGenerate:"Générer", aiCopy:"Copier", copied:"Copié", aiPlatform:"Plateforme",
+  aiTone:"Ton", toneHype:"Énergique", toneTrust:"Professionnel", toneStory:"Storytelling",
+  logout:"Quitter", storeName:"Nom de la boutique", adminPass:"Mot de passe admin", sheetUrl:"URL Google Apps Script",
+  loading:"Chargement…", cloudOn:"Connecté au cloud", cloudOff:"Mode local (ce navigateur)",
+  viewProduct:"Voir le produit", stock:"Stock", sold:"vendus", limited:"Stock limité", adLang:"Langue de l'annonce",
+  category:"Catégorie", pixelsTitle:"Pixels publicitaires (suivi)",
+  fbPixel:"ID Facebook Pixel", fbPixelHelp:"Utilisé pour suivre les visiteurs venant des pubs Facebook/Instagram et mesurer vos campagnes. Copiez-le depuis Meta Events Manager.",
+  ttPixel:"ID TikTok Pixel", ttPixelHelp:"Utilisé pour suivre les visiteurs venant des pubs TikTok et mesurer vos campagnes. Copiez-le depuis TikTok Ads Manager."
+},
+en:{
+  dir:"ltr", admin:"Admin", tagline:"Cash on delivery · 58 wilayas",
+  shopNow:"Order now", buyNow:"Order now — cash on delivery", products:"Our products",
+  allProducts:"All products", featured:"Featured", off:"OFF", da:"DA",
+  searchPh:"Search a product…", noProducts:"No products yet. Add them from the admin panel.",
+  back:"Back", desc:"Description", orderForm:"Complete your order", fullName:"Full name",
+  phone:"Phone number", phone2:"Second phone (optional)", wilaya:"Wilaya", commune:"Commune",
+  address:"Full address", notes:"Note (optional)", deliveryType:"Delivery method",
+  home:"Home delivery", desk:"Office pickup", qty:"Quantity",
+  subtotal:"Product price", shipping:"Shipping", total:"Total to pay",
+  confirm:"Confirm order", sending:"Sending…", pickWilaya:"Select wilaya",
+  pickCommune:"Select commune", other:"Other (type manually)",
+  successTitle:"Order placed ✅", successBody:"We will call you to confirm. Order number:",
+  keepShopping:"Keep shopping", contactWa:"Chat on WhatsApp",
+  required:"Please fill in the required fields", badPhone:"Invalid phone number (9 or 10 digits)",
+  contactUs:"Contact us", payDelivery:"Payment & delivery", rights:"All rights reserved",
+  footerAbout:"Algerian online store — curated products, cash on delivery nationwide.",
+  footerShip:"Pay cash on delivery. Home or office delivery across all 58 wilayas.",
+  t1:"Cash on delivery", t2:"58 wilayas covered", t3:"Authentic products", t4:"Instant WhatsApp support",
+  adminLogin:"Admin access", password:"Password", login:"Sign in", wrongPass:"Wrong password",
+  tabProducts:"Products", tabOrders:"Orders", tabShipping:"Shipping rates", tabAI:"Ad generator",
+  tabSettings:"Settings", addProduct:"Add product", edit:"Edit", del:"Delete", save:"Save",
+  cancel:"Cancel", name:"Product name", priceL:"Price (DA)", oldPrice:"Compare-at price (optional)",
+  images:"Product images", descHtml:"Description (HTML supported)", isFeatured:"Show in main banner",
+  active:"Visible in store", saved:"Saved", deleted:"Deleted", confirmDel:"Delete permanently?",
+  globalRates:"One rate for all wilayas", customRates:"Per-wilaya rates", apply:"Apply to all 58",
+  exportCsv:"Export Excel (CSV)", archiveSheets:"Archive to Google Sheets", openSheet:"Open Google Sheet",
+  statsNote:"Permanent cumulative stats — unaffected by deleting or archiving orders", resetStats:"↺ Reset counter", status:"Status",
+  stPending:"Pending", stConfirmed:"Confirmed", stShipped:"Shipped", stDone:"Delivered", stCancel:"Cancelled",
+  filterAll:"All", filterToday:"Today", filterFrom:"From", filterTo:"To", filterApply:"Apply", filterPickDates:"Pick both dates first",
+  orderNo:"Order", date:"Date", customer:"Customer", product:"Product", actions:"Actions",
+  noOrders:"No orders yet.", aiTitle:"AI ad generator",
+  aiDesc:"Pick a product and get ad copy ready for Facebook and TikTok campaigns.",
+  aiGenerate:"Generate ad", aiCopy:"Copy text", copied:"Copied", aiPlatform:"Platform",
+  aiTone:"Tone", toneHype:"High energy", toneTrust:"Professional", toneStory:"Storytelling",
+  logout:"Sign out", storeName:"Store name", adminPass:"Admin password", sheetUrl:"Google Apps Script URL",
+  loading:"Loading…", cloudOn:"Connected to cloud database", cloudOff:"Local mode (this browser only)",
+  viewProduct:"View product", stock:"Stock", sold:"sold", limited:"Limited stock", adLang:"Ad language",
+  category:"Category", pixelsTitle:"Ad pixels (tracking)",
+  fbPixel:"Facebook Pixel ID", fbPixelHelp:"Used to track visitors coming from Facebook/Instagram ads and measure your campaigns. Copy it from Meta Events Manager.",
+  ttPixel:"TikTok Pixel ID", ttPixelHelp:"Used to track visitors coming from TikTok ads and measure your campaigns. Copy it from TikTok Ads Manager."
+}};
+let LANG = localStorage.getItem('zn_lang') || 'ar';
+const t = k => (I18N[LANG] && I18N[LANG][k]) || I18N.ar[k] || k;
+/* ------------------------- 2.b Product categories ------------------------ */
+const CATS = [
+  {id:"electronics", icon:"📱", label:{ar:"إلكترونيات", fr:"Électronique", en:"Electronics"}},
+  {id:"home",        icon:"🏠", label:{ar:"منزلية وكهرومنزلية", fr:"Maison & Électroménager", en:"Home & Appliances"}},
+  {id:"beauty",       icon:"💄", label:{ar:"مواد التجميل", fr:"Beauté", en:"Cosmetics"}},
+  {id:"other",        icon:"🛍️", label:{ar:"منتجات أخرى", fr:"Autres produits", en:"Other products"}}
+];
+const catInfo  = id => CATS.find(c=>c.id===id);
+const catLabel = id => { const c=catInfo(id); return c ? L(c.label) : ""; };
+const catIcon  = id => { const c=catInfo(id); return c ? c.icon : "🛍️"; };
+/* ------------------------ 3. State & cloud layer ------------------------ */
+const DEFAULT_SETTINGS = {
+  storeName:"ZoubirNasriShop",
+  adminPass:"zoubir2026",
+  whatsapp:"213542248858",
+  facebook:"https://www.facebook.com/profile.php?id=61578436251516",
+  fbPixel:"",                // Facebook / Meta Ads Pixel ID
+  ttPixel:"",                // TikTok Ads Pixel ID
+  globalHome:600, globalDesk:400,
+  rates:{},                 // { "19": {home:500, desk:300} }
+  featuredId:null,
+  sheetUrl:"",
+  // Lifetime order counters — updated on create/status-change, never decremented
+  // on delete/archive, so the dashboard cards keep counting even after orders
+  // are archived to Google Sheets or removed from the store.
+  stats:{count:0, pending:0, confirmed:0, shipped:0, done:0, cancelled:0, revenue:0}
+};
+const STORE_ID = String(new URLSearchParams(location.search).get('s') || window.STORE_ID || 'main')
+  .toLowerCase().replace(/[^a-z0-9_-]/g,'').slice(0,30) || 'main';
+const layoutOf = id => (S.layouts && S.layouts[id]) || {order:[], featuredId:null};
+const sortByLayout = (list, id) => {
+  const o = layoutOf(id).order || [];
+  const rank = p => { const i=o.indexOf(p.id); return i<0 ? 1e9 : i; };
+  return [...list].sort((a,b)=>rank(a)-rank(b));
+};
+const S = {
+  layouts:{}, editStore:null,
+  products:[], orders:[], settings:{...DEFAULT_SETTINGS},
+  view:"home", productId:null, lastOrder:null,
+  admin:false, tab:"products", ready:false, cloud:false, search:"", cat:"all"
+};
+let DB=null, SAMPLE=null, ASSETS=null, DOWNLOADS=null, UID=null;
+
+const LS = {
+  get(k,d){ try{ const v=localStorage.getItem('zn_'+k); return v?JSON.parse(v):d; }catch(e){ return d; } },
+  set(k,v){ try{ localStorage.setItem('zn_'+k, JSON.stringify(v)); }catch(e){} }
+};
+
+function fbReady(){
+  return new Promise(res=>{
+    if(window.__fbDone) return res();
+    window.addEventListener('fb-ready', ()=>res(), {once:true});
+    setTimeout(res, 6000);
+  });
+}
+/* Firestore adapter — same tiny interface the rest of the app already uses. */
+function fbAdapter(){
+  const F=window.FB;
+  const mkDoc = p => ({
+    get:    async()=>{ const s=await F.getDoc(F.docRef(p)); return {id:s.id, exists:s.exists(), data:()=>s.data()}; },
+    set:    d=>F.setDoc(F.docRef(p), d),
+    update: d=>F.updateDoc(F.docRef(p), d),
+    delete: ()=>F.deleteDoc(F.docRef(p))
+  });
+  const mkQ = (p, cs=[]) => ({
+    orderBy:(f,d)=>mkQ(p,[...cs,F.orderBy(f,d||'asc')]),
+    limit:n=>mkQ(p,[...cs,F.limit(n)]),
+    doc:id=>mkDoc(p+'/'+id),
+    get:async()=>{ const s=await F.getDocs(F.query(F.colRef(p),...cs));
+      return {docs:s.docs.map(d=>({id:d.id, exists:true, data:()=>d.data()}))}; },
+    onSnapshot:(cb,err)=>F.onSnapshot(F.query(F.colRef(p),...cs),
+      s=>cb({docs:s.docs.map(d=>({id:d.id, exists:true, data:()=>d.data()}))}), err)
+  });
+  return { doc:mkDoc, collection:mkQ };
+}
+/* AI ad generator: uses the API key the admin stores in THIS browser only. */
+function makeSampler(key){
+  return async (prompt)=>{
+    const r = await fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",
+      headers:{ "content-type":"application/json", "x-api-key":key,
+                "anthropic-version":"2023-06-01",
+                "anthropic-dangerous-direct-browser-access":"true" },
+      body: JSON.stringify({ model:"claude-sonnet-4-6", max_tokens:1200,
+                             messages:[{role:"user", content:prompt}] })
+    });
+    const d = await r.json();
+    if(d.error) throw new Error(d.error.message);
+    return { text: d.content.filter(b=>b.type==="text").map(b=>b.text).join("\n") };
+  };
+}
+async function initCloud(){
+  await fbReady();
+  DB = window.FB ? fbAdapter() : null;
+  S.cloud = !!DB;
+  const key = localStorage.getItem('zn_aikey');
+  SAMPLE = key ? makeSampler(key) : null;
+  await loadAll();
+  loadPixels();
+  S.ready = true;
+  render();
+  if(DB) subscribe();
+}
+async function loadAll(){
+  if(DB){
+    let cloudWorked=false;
+    try{
+      const st = await DB.doc("shop/settings").get();
+      S.settings = {...DEFAULT_SETTINGS, ...(st.exists ? st.data() : {})};
+      const ps = await DB.collection("products").get();
+      S.products = ps.docs.map(d=>({id:d.id, ...d.data()}));
+      cloudWorked = true;
+      try{
+        const ls = await DB.collection("shop").get();
+        S.layouts = {};
+        ls.docs.filter(d=>d.id.startsWith('layout_')).forEach(d=>{ S.layouts[d.id.slice(7)] = d.data(); });
+      }catch(e){ console.warn("db load (layouts) failed", e); }
+      if(!S.products.length && !st.exists) await seedDemo();
+    }catch(e){ console.warn("db load (products/settings) failed", e); }
+    // Reading orders needs admin-level Firestore rules; a viewer without
+    // that access still gets products/settings from the cloud normally.
+    try{
+      const os = await DB.collection("orders").orderBy("createdAt","desc").limit(300).get();
+      S.orders = os.docs.map(d=>({id:d.id, ...d.data()}));
+    }catch(e){ console.warn("db load (orders) failed — check Firestore rules for /orders", e); }
+    S.cloud = cloudWorked;
+    if(cloudWorked) return;
+  }
+  S.settings = {...DEFAULT_SETTINGS, ...LS.get('settings',{})};
+  S.products = LS.get('products',null) || demoProducts();
+  S.orders   = LS.get('orders',[]);
+  S.layouts  = LS.get('layouts',{});
+}
+/* ---- Facebook / TikTok ads pixels — loaded once IDs exist in settings ---- */
+function loadPixels(){
+  const fbId = (S.settings.fbPixel||'').trim();
+  const ttId = (S.settings.ttPixel||'').trim();
+  if(fbId && window.__fbPixelId!==fbId){
+    if(!window.fbq){
+      (function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+      n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)})(window,document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+    }
+    fbq('init', fbId); fbq('track', 'PageView');
+    window.__fbPixelId = fbId;
+  }
+  if(ttId && window.__ttPixelId!==ttId){
+    if(!window.ttq){
+      (function (w, d, t) {
+        w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var i="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=i,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script");n.type="text/javascript",n.async=!0,n.src=i+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
+      }(window, document, 'ttq'));
+    }
+    ttq.load(ttId); ttq.page();
+    window.__ttPixelId = ttId;
+  }
+}
+function trackViewContent(p){
+  if(!p) return;
+  try{ if(window.fbq && window.__fbPixelId) fbq('track','ViewContent',{content_name:L(p.name), content_ids:[p.id], value:p.price, currency:'DZD'}); }catch(e){}
+  try{ if(window.ttq && window.__ttPixelId) ttq.track('ViewContent',{content_name:L(p.name), content_id:p.id, value:p.price, currency:'DZD'}); }catch(e){}
+}
+function trackPurchase(o){
+  if(!o) return;
+  try{ if(window.fbq && window.__fbPixelId) fbq('track','Purchase',{content_name:o.productName, content_ids:[o.productId], value:o.total, currency:'DZD', num_items:o.qty}); }catch(e){}
+  try{ if(window.ttq && window.__ttPixelId) ttq.track('CompletePayment',{content_name:o.productName, content_id:o.productId, value:o.total, currency:'DZD', quantity:o.qty}); }catch(e){}
+}
+function subscribe(){
+  try{
+    DB.collection("products").onSnapshot(s=>{
+      S.products = s.docs.map(d=>({id:d.id, ...d.data()}));
+      if(S.ready && (S.view!=="order")) render();
+    }, e=>console.warn(e));
+    DB.collection("shop").onSnapshot(s=>{
+      const next = {};
+      s.docs.filter(d=>d.id.startsWith('layout_')).forEach(d=>{ next[d.id.slice(7)] = d.data(); });
+      if(JSON.stringify(next)!==JSON.stringify(S.layouts)){
+        S.layouts = next;
+        if(S.ready && S.view!=="order" && !(S.view==="admin" && S.tab!=="products")) render();
+      }
+    }, e=>console.warn(e));
+    DB.collection("orders").orderBy("createdAt","desc").limit(300).onSnapshot(s=>{
+      S.orders = s.docs.map(d=>({id:d.id, ...d.data()}));
+      checkNewOrders();
+      if(S.ready && S.view==="admin" && S.tab==="orders") render();
+    }, e=>console.warn(e));
+  }catch(e){}
+}
+/* ---- new-order alerts (sound + vibration + system notification) ----
+   Works while the admin is logged in on the device and the page is open
+   (screen kept awake via Wake Lock). For alerts when the app is CLOSED, use
+   the Telegram push in google-apps-script.gs. */
+const Alert = { ctx:null, seen:null, wake:null, unread:0, title:document.title };
+const alertOn = () => !!LS.get('alert', false);
+function unlockAudio(){
+  try{
+    Alert.ctx = Alert.ctx || new (window.AudioContext||window.webkitAudioContext)();
+    if(Alert.ctx.state==='suspended') Alert.ctx.resume();
+  }catch(e){}
+}
+function playChime(times=3){
+  try{
+    unlockAudio(); const c=Alert.ctx; if(!c) return;
+    for(let r=0;r<times;r++){
+      const base=c.currentTime + r*1.15;
+      [[880,0],[1175,.16],[1568,.32],[1175,.6],[1568,.76]].forEach(([f,d])=>{
+        const o=c.createOscillator(), g=c.createGain();
+        o.type='triangle'; o.frequency.value=f;
+        g.gain.setValueAtTime(0.0001,base+d);
+        g.gain.linearRampToValueAtTime(.55,base+d+.02);
+        g.gain.exponentialRampToValueAtTime(.001,base+d+.45);
+        o.connect(g); g.connect(c.destination); o.start(base+d); o.stop(base+d+.5);
+      });
+    }
+  }catch(e){}
+}
+async function requestWake(){
+  try{ if('wakeLock' in navigator && !Alert.wake){
+    Alert.wake = await navigator.wakeLock.request('screen');
+    Alert.wake.addEventListener('release',()=>{ Alert.wake=null; });
+  } }catch(e){}
+}
+function releaseWake(){ try{ Alert.wake && Alert.wake.release(); }catch(e){} Alert.wake=null; }
+async function showSysNotif(title, body){
+  try{
+    if(!('Notification' in window) || Notification.permission!=='granted') return;
+    const opts={ body, tag:'zn-order', renotify:true, vibrate:[300,120,300,120,500] };
+    const reg = 'serviceWorker' in navigator ? await navigator.serviceWorker.getRegistration() : null;
+    if(reg) reg.showNotification(title, opts); else new Notification(title, opts);
+  }catch(e){}
+}
+function checkNewOrders(){
+  const ids = new Set(S.orders.map(o=>o.id));
+  if(!Alert.seen){ Alert.seen = ids; return; }          // first snapshot = silent baseline
+  const fresh = S.orders.filter(o=>!Alert.seen.has(o.id) && o.status==='pending');
+  Alert.seen = ids;
+  if(!fresh.length || !S.admin || !alertOn()) return;
+  playChime();
+  try{ navigator.vibrate && navigator.vibrate([300,120,300,120,500]); }catch(e){}
+  const o = fresh[0];
+  const msg = `🛒 طلب جديد: ${o.customer} — ${o.productName||''} — ${Number(o.total||0).toLocaleString('fr-DZ')} دج`
+            + (fresh.length>1 ? ` (+${fresh.length-1})` : '');
+  toast(msg);
+  showSysNotif('🔔 طلب جديد', msg);
+  if(document.hidden){ Alert.unread += fresh.length; document.title = `🔔 (${Alert.unread}) طلب جديد`; }
+}
+async function toggleAlert(){
+  const on = !alertOn();
+  if(on){
+    unlockAudio(); playChime(1);
+    try{ if('Notification' in window && Notification.permission==='default') await Notification.requestPermission(); }catch(e){}
+    requestWake();
+  } else releaseWake();
+  LS.set('alert', on); render();
+}
+document.addEventListener('visibilitychange',()=>{
+  if(!document.hidden){ Alert.unread=0; document.title=Alert.title; if(alertOn() && S.admin) requestWake(); }
+});
+document.addEventListener('pointerdown',()=>{ if(alertOn() && S.admin) unlockAudio(); },{passive:true});
+if('serviceWorker' in navigator){ navigator.serviceWorker.register('/sw.js',{scope:'/',updateViaCache:'none'}).catch(()=>{}); }
+async function saveSettings(){
+  S.settings.updatedAt = new Date().toISOString();
+  if(DB){ try{ await DB.doc("shop/settings").set(S.settings); return true; }catch(e){ toast("⚠︎ "+e.code); } }
+  LS.set('settings', S.settings); return true;
+}
+async function saveLayout(id){
+  const lay = {...layoutOf(id), updatedAt:new Date().toISOString()};
+  S.layouts[id] = lay;
+  if(DB){ try{ await DB.doc("shop/layout_"+id).set(lay); return true; }catch(e){ toast("⚠︎ "+(e.code||e.message)); return false; } }
+  LS.set('layouts', S.layouts); return true;
+}
+async function saveProduct(p){
+  p.updatedAt = new Date().toISOString();
+  if(!p.createdAt) p.createdAt = p.updatedAt;
+  if(DB){
+    try{
+      const id = p.id || ("p_"+Date.now().toString(36));
+      const body = {...p}; delete body.id;
+      await DB.doc("products/"+id).set(body);
+      return id;
+    }catch(e){ toast("⚠︎ "+e.code); }
+  }
+  p.id = p.id || ("p_"+Date.now().toString(36));
+  const i = S.products.findIndex(x=>x.id===p.id);
+  if(i>=0) S.products[i]=p; else S.products.push(p);
+  LS.set('products', S.products); return p.id;
+}
+async function removeProduct(id){
+  if(DB){
+    try{ await DB.doc("products/"+id).delete(); }
+    catch(e){ toast("⚠︎ "+(e.code||e.message)); return false; }
+  }
+  S.products = S.products.filter(p=>p.id!==id);
+  LS.set('products', S.products);
+  return true;
+}
+/* ---- lifetime order counters (survive delete/archive — see DEFAULT_SETTINGS.stats) ---- */
+function ensureStats(){
+  if(!S.settings.stats) S.settings.stats = {count:0,pending:0,confirmed:0,shipped:0,done:0,cancelled:0,revenue:0};
+  return S.settings.stats;
+}
+function bumpStatsOnCreate(o){
+  const s = ensureStats();
+  s.count = (s.count||0)+1;
+  s.pending = (s.pending||0)+1;
+  s.revenue = (s.revenue||0) + (Number(o.total)||0);
+}
+function bumpStatsOnStatusChange(oldStatus, newStatus, total){
+  if(oldStatus===newStatus) return;
+  const s = ensureStats();
+  if(oldStatus && s[oldStatus]!=null) s[oldStatus]=Math.max(0,(s[oldStatus]||0)-1);
+  if(newStatus) s[newStatus]=(s[newStatus]||0)+1;
+  const wasCancelled=oldStatus==='cancelled', isCancelled=newStatus==='cancelled';
+  if(wasCancelled && !isCancelled) s.revenue=(s.revenue||0)+(Number(total)||0);
+  else if(!wasCancelled && isCancelled) s.revenue=(s.revenue||0)-(Number(total)||0);
+}
+/* Manual, explicit reset of the lifetime counters only — never touches
+   S.orders, so today's live order list/table is completely unaffected. */
+async function resetStats(){
+  if(!confirm('سيتم تصفير كل عدادات لوحة التحكم (الطلبات، الحالات، المجموع الكلي) إلى 0. هذا لا يحذف أي طلبية ولا يمكن التراجع عنه بعد التأكيد. متابعة؟')) return;
+  S.settings.stats = {count:0,pending:0,confirmed:0,shipped:0,done:0,cancelled:0,revenue:0};
+  await saveSettings();
+  render();
+  toast('✅ تم تصفير العداد');
+}
+async function addOrder(o){
+  o.createdAt = new Date().toISOString();
+  o.status = "pending";
+  o.storeId = STORE_ID;
+  const id = "ZN"+Date.now().toString(36).toUpperCase().slice(-6);
+  o.ref = id;
+  const sheetUrl = S.settings.sheetUrl || window.SHEETS_URL;
+  if(sheetUrl){ pushSheet([{id, ...o}]); o.sheetSynced = true; } // remembers it's already in the sheet, so archiving never re-sends it
+  bumpStatsOnCreate(o); await saveSettings();
+  if(DB){
+    try{ await DB.doc("orders/"+id).set(o); return {id, ...o}; }
+    catch(e){ toast("⚠︎ "+(e.code||e.message)); }
+  }
+  const rec = {id, ...o};
+  S.orders.unshift(rec); LS.set('orders', S.orders); return rec;
+}
+async function updateOrder(id, patch){
+  if(DB){ try{ await DB.doc("orders/"+id).update(patch); return; }catch(e){ toast("⚠︎ "+e.code); } }
+  const i=S.orders.findIndex(o=>o.id===id); if(i>=0) S.orders[i]={...S.orders[i],...patch};
+  LS.set('orders', S.orders);
+}
+/* Deleting or archiving an order only removes it from S.orders (the store's
+   live list) — it intentionally never touches S.settings.stats, so the
+   dashboard counters keep their lifetime totals for bookkeeping. */
+async function removeOrder(id){
+  if(DB){
+    try{ await DB.doc("orders/"+id).delete(); }
+    catch(e){ toast("⚠︎ "+(e.code||e.message)); return false; }
+  }
+  S.orders = S.orders.filter(o=>o.id!==id); LS.set('orders', S.orders);
+  return true;
+}
+
+/* ------------------------- 4. Helpers & UI atoms ------------------------ */
+const esc = s => String(s==null?"":s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const money = n => new Intl.NumberFormat(LANG==='ar'?'ar-DZ':'fr-DZ',{maximumFractionDigits:0}).format(Number(n)||0)+" "+t('da');
+const byId = id => S.products.find(p=>p.id===id);
+function toast(msg){
+  const h=document.getElementById('toastHost');
+  h.innerHTML = `<div class="toast"><div>${esc(msg)}</div></div>`;
+  clearTimeout(window.__tt); window.__tt=setTimeout(()=>h.innerHTML='',2600);
+}
+function ph(label,hue){ // inline SVG placeholder (no remote images allowed)
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800">
+  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+  <stop offset="0" stop-color="hsl(${hue},45%,90%)"/><stop offset="1" stop-color="hsl(${hue},40%,74%)"/>
+  </linearGradient></defs><rect width="800" height="800" fill="url(#g)"/>
+  <circle cx="400" cy="330" r="130" fill="hsl(${hue},48%,62%)" opacity=".55"/>
+  <rect x="230" y="500" width="340" height="40" rx="20" fill="hsl(${hue},40%,50%)" opacity=".45"/>
+  <rect x="290" y="570" width="220" height="26" rx="13" fill="hsl(${hue},40%,50%)" opacity=".3"/>
+  <text x="400" y="700" font-family="sans-serif" font-size="42" font-weight="700" fill="hsl(${hue},45%,35%)" text-anchor="middle">${label}</text></svg>`;
+  return "data:image/svg+xml;utf8,"+encodeURIComponent(svg);
+}
+function demoProducts(){
+  return [
+    {id:"p_demo1", category:"electronics", name:{ar:"ساعة ذكية Smart Watch S9",fr:"Montre connectée S9",en:"Smart Watch S9"},
+     price:4900, oldPrice:7500, images:[ph("Smart Watch",200),ph("Watch · 2",210)],
+     desc:{ar:"<h3>ساعة ذكية بشاشة AMOLED</h3><ul><li>قياس نبضات القلب والأكسجين</li><li>بطارية تدوم 7 أيام</li><li>مقاومة للماء IP68</li><li>إشعارات المكالمات والرسائل</li></ul><p>متوفرة بألوان متعددة — الدفع عند الاستلام.</p>",
+            fr:"<h3>Montre connectée écran AMOLED</h3><ul><li>Fréquence cardiaque & SpO2</li><li>7 jours d'autonomie</li><li>Étanche IP68</li></ul>",
+            en:"<h3>AMOLED smart watch</h3><ul><li>Heart rate & SpO2</li><li>7-day battery</li><li>IP68 water resistant</li></ul>"},
+     active:true, stock:48, sold:126, createdAt:new Date().toISOString()},
+    {id:"p_demo2", category:"electronics", name:{ar:"سماعات لاسلكية Air Pro",fr:"Écouteurs sans fil Air Pro",en:"Air Pro Wireless Earbuds"},
+     price:3200, oldPrice:4800, images:[ph("Air Pro",160)],
+     desc:{ar:"<h3>صوت نقي وعزل ضجيج</h3><ul><li>بلوتوث 5.3</li><li>علبة شحن 30 ساعة</li><li>تحكم باللمس</li></ul>",
+            fr:"<h3>Son clair, réduction de bruit</h3><ul><li>Bluetooth 5.3</li><li>30h d'autonomie</li></ul>",
+            en:"<h3>Clean sound, noise isolation</h3><ul><li>Bluetooth 5.3</li><li>30h with case</li></ul>"},
+     active:true, stock:60, sold:214, createdAt:new Date().toISOString()},
+    {id:"p_demo3", category:"home", name:{ar:"خلاط كهربائي متعدد الاستخدامات",fr:"Mixeur électrique multifonction",en:"Multi-function Electric Blender"},
+     price:5400, oldPrice:6900, images:[ph("Blender",95)],
+     desc:{ar:"<h3>خلاط قوي للمطبخ</h3><ul><li>محرك 600 واط</li><li>3 سرعات + وضع النبض</li><li>وعاء زجاجي 1.5 لتر</li></ul>",
+            fr:"<h3>Mixeur puissant pour la cuisine</h3><ul><li>Moteur 600W</li><li>3 vitesses + pulse</li><li>Bol en verre 1.5L</li></ul>",
+            en:"<h3>Powerful kitchen blender</h3><ul><li>600W motor</li><li>3 speeds + pulse</li><li>1.5L glass jar</li></ul>"},
+     active:true, stock:30, sold:58, createdAt:new Date().toISOString()},
+    {id:"p_demo4", category:"beauty", name:{ar:"طقم عناية بالبشرة",fr:"Coffret soin visage",en:"Skincare Gift Set"},
+     price:2900, oldPrice:3800, images:[ph("Skincare",320)],
+     desc:{ar:"<p>طقم كامل لتنظيف وترطيب البشرة، مكوّنات طبيعية مناسبة لكل أنواع البشرة.</p>",
+            fr:"<p>Coffret complet de nettoyage et hydratation, ingrédients naturels pour tout type de peau.</p>",
+            en:"<p>Complete cleansing & hydration set, natural ingredients for all skin types.</p>"},
+     active:true, stock:40, sold:73, createdAt:new Date().toISOString()},
+    {id:"p_demo5", category:"other", name:{ar:"منظّم مكتب خشبي",fr:"Organiseur de bureau",en:"Wooden Desk Organizer"},
+     price:2400, oldPrice:0, images:[ph("Desk Set",35)],
+     desc:{ar:"<p>منظّم مكتب أنيق من الخشب الطبيعي، 5 أقسام.</p>",fr:"<p>Organiseur en bois naturel, 5 compartiments.</p>",en:"<p>Natural wood organizer, 5 compartments.</p>"},
+     active:true, stock:25, sold:41, createdAt:new Date().toISOString()}
+  ];
+}
+async function seedDemo(){
+  const demo = demoProducts();
+  S.products = demo; S.settings = {...DEFAULT_SETTINGS, featuredId:"p_demo1"};
+  try{
+    for(const p of demo){ const b={...p}; delete b.id; await DB.doc("products/"+p.id).set(b); }
+    await DB.doc("shop/settings").set(S.settings);
+  }catch(e){}
+}
+const L = (v) => { // localized field: {ar,fr,en} or plain string
+  if(v==null) return "";
+  if(typeof v === "string") return v;
+  return v[LANG] || v.ar || v.fr || v.en || "";
+};
+function shipFor(wcode, type){
+  const r = S.settings.rates && S.settings.rates[String(wcode)];
+  if(r && r[type]!=null && r[type]!=="") return Number(r[type]);
+  return Number(type==="home" ? S.settings.globalHome : S.settings.globalDesk) || 0;
+}
+function setLang(l){
+  LANG=l; localStorage.setItem('zn_lang', l);
+  document.documentElement.lang=l;
+  document.documentElement.dir=I18N[l].dir;
+  document.querySelectorAll('#langPill button').forEach(b=>b.setAttribute('aria-pressed', b.dataset.lang===l));
+  document.querySelectorAll('[data-i18n]').forEach(e=>e.textContent=t(e.dataset.i18n));
+  document.getElementById('tagline').textContent=t('tagline');
+  render();
+}
+function go(view, id){ S.view=view; S.productId=id||null; window.scrollTo({top:0,behavior:'instant'}); render(); }
+
+/* ------------------------------ 5. Router ------------------------------- */
+function render(){
+  const app=document.getElementById('app');
+  if(!S.ready){ app.innerHTML = skeleton(); return; }
+  if(S.view==="product") app.innerHTML = viewProduct();
+  else if(S.view==="success") app.innerHTML = viewSuccess();
+  else if(S.view==="policy") app.innerHTML = viewPolicy();
+  else if(S.view==="admin") app.innerHTML = viewAdmin();
+  else app.innerHTML = viewHome();
+  document.querySelectorAll('[data-i18n]').forEach(e=>e.textContent=t(e.dataset.i18n));
+  if(S.view==="product"){ wireOrderForm(); mountDescFrame(); trackViewContent(byId(S.productId)); }
+  if(S.view==="admin") wireAdmin();
+}
+/* ---------------------------------------------------------------------------
+   Isolated, auto-sizing product description.
+   Admin-pasted descriptions sometimes arrive as a full HTML page (their own
+   <style>, fixed pixel widths, a wrapping <div id="root">…). Injecting that
+   straight into the storefront's DOM makes its CSS apply globally — that is
+   exactly why formatting used to break on both phone and desktop at once.
+   Loading it inside a sandboxed iframe keeps its markup/CSS fully contained,
+   then this code measures the frame's real content height (after layout AND
+   after every image finishes loading) and applies it to the frame element,
+   so the frame is never scrollable and always matches its content — on any
+   screen size, automatically. ------------------------------------------- */
+function mountDescFrame(){
+  const ifr = document.getElementById('descFrame'); if(!ifr) return;
+  const p = byId(S.productId); if(!p) return;
+  const html = L(p.desc) || `<p style="color:#9a8fae">${esc(t('noProducts'))}</p>`;
+  const cs = getComputedStyle(document.documentElement);
+  const v = name => (cs.getPropertyValue(name)||'').trim();
+  const dir = document.documentElement.dir || 'rtl';
+  const doc = `<!doctype html><html dir="${dir}"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Outfit:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0; padding:0}
+body{font-family:"Cairo","Outfit",system-ui,-apple-system,sans-serif; font-size:16px; line-height:1.9;
+  color:${v('--ink')||'#241539'}; background:transparent; overflow-x:hidden; word-wrap:break-word; overflow-wrap:anywhere}
+img,video{max-width:100% !important; width:auto; height:auto !important; display:block; margin:12px auto; border-radius:16px}
+iframe{max-width:100% !important; width:100%; aspect-ratio:16/9; border:0; border-radius:16px}
+h1,h2,h3,h4{line-height:1.3; margin:18px 0 8px; font-weight:800}
+p{margin:10px 0}
+ul,ol{padding-inline-start:22px; margin:10px 0}
+li{margin:5px 0}
+a{color:${v('--brand-ink')||'#C74E00'}}
+table{border-collapse:collapse; max-width:100%; width:100%}
+td,th{border:1px solid ${v('--line')||'#F1E1CE'}; padding:7px 10px; font-size:.9rem}
+.tbl-wrap{max-width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; border-radius:10px}
+pre{max-width:100%; overflow-x:auto}
+*{max-width:100%}
+</style></head><body>${html}</body></html>`;
+  ifr.srcdoc = doc;
+  ifr.onload = () => {
+    let cdoc; try{ cdoc = ifr.contentDocument; }catch(e){ return; }
+    if(!cdoc) return;
+    cdoc.querySelectorAll('table').forEach(tb=>{
+      if(tb.parentElement && tb.parentElement.classList.contains('tbl-wrap')) return;
+      const wrap=cdoc.createElement('div'); wrap.className='tbl-wrap';
+      tb.parentNode.insertBefore(wrap, tb); wrap.appendChild(tb);
+    });
+    const resize = () => {
+      if(ifr.isConnected===false) return;
+      const h = Math.max(cdoc.documentElement.scrollHeight, cdoc.body.scrollHeight);
+      ifr.style.height = (h+4)+'px';
+    };
+    resize();
+    try{ new ResizeObserver(resize).observe(cdoc.body); }catch(e){}
+    cdoc.querySelectorAll('img').forEach(img=>{
+      if(!img.complete) img.addEventListener('load', resize);
+      img.addEventListener('error', resize);
+    });
+    window.addEventListener('resize', resize);
+  };
+}
+function skeleton(){
+  return `<div class="skel" style="height:300px; border-radius:28px"></div>
+  <div class="grid-products" style="margin-top:24px">${Array.from({length:8}).map(()=>'<div class="skel" style="height:240px"></div>').join('')}</div>`;
+}
+
+/* ---------------------------- 6. Storefront ----------------------------- */
+function filteredProducts(){
+  return sortByLayout(S.products, STORE_ID).filter(p=>p.active!==false)
+    .filter(p=>S.cat==='all' || (p.category||'other')===S.cat)
+    .filter(p=>!S.search || L(p.name).toLowerCase().includes(S.search.toLowerCase()));
+}
+function catBarHtml(){
+  const pill=(id,icon,label)=>`<button class="cat-pill" data-on="${S.cat===id?1:0}" onclick="setCat('${id}')">
+    <span class="ic">${icon}</span><span>${esc(label)}</span></button>`;
+  return `<div class="cat-bar">
+    ${pill('all','🗂️',t('filterAll'))}
+    ${CATS.map(c=>pill(c.id,c.icon,L(c.label))).join('')}
+  </div>`;
+}
+function setCat(id){ S.cat=id; paintGrid(); repaintCatBar(); }
+function repaintCatBar(){ const h=document.getElementById('catBarHost'); if(h) h.innerHTML=catBarHtml(); }
+function viewHome(){
+  const list = filteredProducts();
+  const feat = byId(layoutOf(STORE_ID).featuredId) || sortByLayout(S.products, STORE_ID).find(p=>p.active!==false);
+  return `
+  ${feat ? heroHtml(feat) : ''}
+  <section class="trust" style="margin-top:18px">
+    <div>💵 <span>${t('t1')}</span></div><div>🚚 <span>${t('t2')}</span></div>
+    <div>✅ <span>${t('t3')}</span></div><div>💬 <span>${t('t4')}</span></div>
+  </section>
+  <section style="margin-top:34px">
+    <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:6px">
+      <h2 style="font-size:1.4rem">${t('products')}</h2>
+      <div style="flex:1"></div>
+      <input class="field" id="searchBox" style="max-width:280px" placeholder="${t('searchPh')}" value="${esc(S.search)}"
+        oninput="S.search=this.value; paintGrid()">
+    </div>
+    <div id="catBarHost">${catBarHtml()}</div>
+    <div id="gridHost">${gridHtml(list)}</div>
+  </section>`;
+}
+function gridHtml(list){
+  return list.length ? `<div class="grid-products">${list.map(cardHtml).join('')}</div>`
+    : `<div class="card muted" style="padding:40px; text-align:center">${t('noProducts')}</div>`;
+}
+function paintGrid(){
+  const host=document.getElementById('gridHost'); if(!host) return;
+  host.innerHTML=gridHtml(filteredProducts());
+}
+function discount(p){ return (p.oldPrice && p.oldPrice>p.price) ? Math.round((1-p.price/p.oldPrice)*100) : 0; }
+function heroHtml(p){
+  const d = discount(p);
+  return `<section class="hero"><div class="hero-grid">
+    <div class="hero-media"><img src="${esc((p.images&&p.images[0])||ph('ZN',150))}" alt="${esc(L(p.name))}"></div>
+    <div class="hero-body">
+      <div style="display:flex; gap:8px; flex-wrap:wrap">
+        <span class="badge">★ ${t('featured')}</span>
+        ${d?`<span class="badge badge-accent">−${d}% ${t('off')}</span>`:''}
+      </div>
+      <h1 class="hero-title">${esc(L(p.name))}</h1>
+      <div style="display:flex; align-items:baseline; gap:12px; flex-wrap:wrap">
+        <span class="price" style="font-size:2rem; color:var(--accent)">${money(p.price)}</span>
+        ${p.oldPrice?`<span class="strike price" style="font-size:1.1rem">${money(p.oldPrice)}</span>`:''}
+      </div>
+      <p class="muted" style="margin:0; font-size:.95rem">${esc(stripTags(L(p.desc)).slice(0,150))}…</p>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:6px">
+        <button class="btn btn-accent" style="padding:14px 28px; font-size:1.02rem" onclick="go('product','${p.id}')">${t('buyNow')}</button>
+        <a class="btn btn-ghost" href="https://wa.me/${esc(S.settings.whatsapp)}" target="_blank" rel="noopener">${t('contactWa')}</a>
+      </div>
+    </div></div></section>`;
+}
+function stripTags(h){ const d=document.createElement('div'); d.innerHTML=h||''; return d.textContent||''; }
+function cardHtml(p){
+  const d=discount(p);
+  return `<article class="pcard" onclick="go('product','${p.id}')">
+    <div class="pcard-media">
+      ${d?`<span class="ribbon badge badge-accent">−${d}%</span>`:''}
+      <img loading="lazy" src="${esc((p.images&&p.images[0])||ph('ZN',150))}" alt="${esc(L(p.name))}">
+    </div>
+    <div class="pcard-body">
+      <div class="muted" style="font-size:.72rem; font-weight:700">${catIcon(p.category)} ${esc(catLabel(p.category)||catLabel('other'))}</div>
+      <div class="pcard-name">${esc(L(p.name))}</div>
+      <div style="flex:1"></div>
+      <div style="display:flex; align-items:baseline; gap:8px; flex-wrap:wrap">
+        <span class="price" style="color:var(--accent); font-size:1.05rem">${money(p.price)}</span>
+        ${p.oldPrice?`<span class="strike price" style="font-size:.82rem">${money(p.oldPrice)}</span>`:''}
+      </div>
+      <div class="muted" style="font-size:.74rem">${p.sold?`${p.sold} ${t('sold')} · `:''}${t('t1')}</div>
+    </div></article>`;
+}
+
+/* -------- product landing page (vertical images, no inner scrollbars) --- */
+function viewProduct(){
+  const p = byId(S.productId); if(!p) return viewHome();
+  const d = discount(p);
+  const imgs = (p.images&&p.images.length?p.images:[ph('ZN',150)]);
+  return `
+  <button class="btn btn-ghost btn-sm" onclick="go('home')" style="margin-bottom:14px">← ${t('back')}</button>
+  <div class="pdp">
+    <div>
+      <h1 style="font-size:clamp(1.3rem,4vw,1.9rem); margin-bottom:10px">${esc(L(p.name))}</h1>
+      <div style="display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom:16px">
+        <span class="price" style="font-size:1.8rem; color:var(--accent)">${money(p.price)}</span>
+        ${p.oldPrice?`<span class="strike price">${money(p.oldPrice)}</span>`:''}
+        ${d?`<span class="badge badge-accent">−${d}% ${t('off')}</span>`:''}
+        ${p.stock!=null && p.stock<20 ? `<span class="badge">${t('limited')} · ${p.stock}</span>`:''}
+      </div>
+      <div class="gallery">
+        ${imgs.map((src,i)=>`<figure class="gimg" onclick="this.classList.toggle('zoomed')">
+          <img loading="${i?'lazy':'eager'}" src="${esc(src)}" alt="${esc(L(p.name))} ${i+1}"></figure>`).join('')}
+      </div>
+      <section class="card" style="padding:22px; margin-top:20px">
+        <h2 style="font-size:1.1rem; margin-bottom:8px">${t('desc')}</h2>
+        <div class="desc-frame-wrap"><iframe id="descFrame" class="desc-frame" title="${esc(t('desc'))}" scrolling="no"></iframe></div>
+      </section>
+    </div>
+    <aside class="order-box">${orderFormHtml(p)}</aside>
+  </div>`;
+}
+function orderFormHtml(p){
+  return `<form class="card" id="orderForm" style="padding:22px" onsubmit="return false">
+    <h2 style="font-size:1.15rem; margin-bottom:4px">${t('orderForm')}</h2>
+    <p class="muted" style="font-size:.85rem; margin:0 0 16px">${t('t1')} · ${t('t2')}</p>
+    <div style="display:grid; gap:12px">
+      <div><label class="lbl">${t('fullName')} *</label><input class="field" id="f_name" required autocomplete="name"></div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
+        <div><label class="lbl">${t('phone')} *</label><input class="field" id="f_phone" inputmode="tel" placeholder="05XXXXXXXX" required></div>
+        <div><label class="lbl">${t('phone2')}</label><input class="field" id="f_phone2" inputmode="tel"></div>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
+        <div><label class="lbl">${t('wilaya')} *</label>
+          <select class="field" id="f_wilaya" required>
+            <option value="">${t('pickWilaya')}</option>
+            ${DZ.map(w=>`<option value="${w[0]}">${String(w[0]).padStart(2,'0')} — ${LANG==='ar'?esc(w[1]):esc(w[2])}</option>`).join('')}
+          </select></div>
+        <div><label class="lbl">${t('commune')} *</label>
+          <select class="field" id="f_commune" required><option value="">${t('pickCommune')}</option></select>
+          <input class="field hidden" id="f_commune_other" style="margin-top:8px" placeholder="${t('commune')}">
+        </div>
+      </div>
+      <div>
+        <label class="lbl">${t('deliveryType')} *</label>
+        <div style="display:flex; gap:10px">
+          <label class="radio-card" data-on="1" id="rc_home">
+            <input type="radio" name="dtype" value="home" checked style="accent-color:var(--brand)">
+            <span style="flex:1">🏠 ${t('home')}</span><b class="price" id="p_home">—</b></label>
+          <label class="radio-card" id="rc_desk">
+            <input type="radio" name="dtype" value="desk" style="accent-color:var(--brand)">
+            <span style="flex:1">🏢 ${t('desk')}</span><b class="price" id="p_desk">—</b></label>
+        </div>
+      </div>
+      <div><label class="lbl">${t('address')} *</label><input class="field" id="f_addr" required></div>
+      <div><label class="lbl">${t('qty')}</label>
+        <div class="qty"><button type="button" onclick="bumpQty(-1)">−</button><span id="f_qty">1</span><button type="button" onclick="bumpQty(1)">+</button></div>
+      </div>
+      <div><label class="lbl">${t('notes')}</label><textarea class="field" id="f_notes" rows="2"></textarea></div>
+    </div>
+    <div style="margin-top:18px; padding-top:14px; border-top:1px dashed var(--line); display:grid; gap:7px; font-size:.95rem">
+      <div style="display:flex; justify-content:space-between"><span class="muted">${t('subtotal')}</span><b class="price" id="s_sub">${money(p.price)}</b></div>
+      <div style="display:flex; justify-content:space-between"><span class="muted">${t('shipping')}</span><b class="price" id="s_ship">—</b></div>
+      <div style="display:flex; justify-content:space-between; font-size:1.15rem">
+        <span style="font-weight:800">${t('total')}</span><b class="price" id="s_total" style="color:var(--accent)">${money(p.price)}</b></div>
+    </div>
+    <button class="btn btn-accent" id="submitBtn" style="width:100%; margin-top:16px; padding:15px; font-size:1.05rem"
+      onclick="submitOrder('${p.id}')">${t('confirm')}</button>
+    <p class="muted" style="font-size:.76rem; text-align:center; margin:10px 0 0">🔒 ${t('t1')} — 0542248858</p>
+  </form>`;
+}
+let QTY=1;
+function bumpQty(n){ QTY=Math.max(1,Math.min(99,QTY+n)); document.getElementById('f_qty').textContent=QTY; recalc(); }
+function wireOrderForm(){
+  QTY=1;
+  const w=document.getElementById('f_wilaya'); if(!w) return;
+  w.addEventListener('change',()=>{
+    const wc=w.value, sel=document.getElementById('f_commune');
+    const row=DZ.find(x=>String(x[0])===String(wc));
+    sel.innerHTML=`<option value="">${t('pickCommune')}</option>`+
+      (row?row[3].map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join(''):'')+
+      `<option value="__other">${t('other')}</option>`;
+    document.getElementById('f_commune_other').classList.add('hidden');
+    recalc();
+  });
+  document.getElementById('f_commune').addEventListener('change',e=>{
+    document.getElementById('f_commune_other').classList.toggle('hidden', e.target.value!=='__other');
+  });
+  document.querySelectorAll('input[name="dtype"]').forEach(r=>r.addEventListener('change',()=>{
+    document.getElementById('rc_home').dataset.on = r.form.dtype.value==='home'?'1':'';
+    document.getElementById('rc_desk').dataset.on = r.form.dtype.value==='desk'?'1':'';
+    recalc();
+  }));
+  recalc();
+}
+function recalc(){
+  const p=byId(S.productId); if(!p) return;
+  const wc=document.getElementById('f_wilaya')?.value;
+  const type=document.querySelector('input[name="dtype"]:checked')?.value||'home';
+  const h=document.getElementById('p_home'), dk=document.getElementById('p_desk');
+  if(wc){ h.textContent=money(shipFor(wc,'home')); dk.textContent=money(shipFor(wc,'desk')); }
+  else { h.textContent='—'; dk.textContent='—'; }
+  const sub=p.price*QTY, ship=wc?shipFor(wc,type):0;
+  document.getElementById('s_sub').textContent=money(sub);
+  document.getElementById('s_ship').textContent=wc?money(ship):'—';
+  document.getElementById('s_total').textContent=money(sub+ship);
+}
+async function submitOrder(pid){
+  const p=byId(pid); if(!p) return;
+  const g=id=>document.getElementById(id)?.value.trim()||'';
+  let commune=g('f_commune'); if(commune==='__other') commune=g('f_commune_other');
+  const phone=g('f_phone').replace(/\s|-/g,'');
+  const wc=g('f_wilaya');
+  if(!g('f_name')||!phone||!wc||!commune||!g('f_addr')) return toast(t('required'));
+  if(!/^0?[5-7]\d{8}$/.test(phone)) return toast(t('badPhone'));
+  const type=document.querySelector('input[name="dtype"]:checked')?.value||'home';
+  const row=DZ.find(x=>String(x[0])===String(wc));
+  const ship=shipFor(wc,type), sub=p.price*QTY;
+  const btn=document.getElementById('submitBtn');
+  btn.disabled=true; btn.innerHTML=`<span class="spinner"></span> ${t('sending')}`;
+  const order=await addOrder({
+    productId:p.id, productName:L(p.name), unitPrice:p.price, qty:QTY,
+    customer:g('f_name'), phone, phone2:g('f_phone2'),
+    wilayaCode:Number(wc), wilaya:row?row[2]:'', wilayaAr:row?row[1]:'',
+    commune, address:g('f_addr'), notes:g('f_notes'),
+    deliveryType:type, shipping:ship, subtotal:sub, total:sub+ship, lang:LANG
+  });
+  S.lastOrder=order;
+  trackPurchase(order);
+  go('success');
+}
+const POLICY = {
+ privacy:{
+  ar:`<h1>سياسة الخصوصية</h1>
+  <p>نجمع فقط المعلومات الضرورية لتنفيذ طلبك: الاسم، رقم الهاتف، الولاية، البلدية والعنوان.</p>
+  <h3>كيف نستعملها</h3><ul><li>الاتصال بك لتأكيد الطلب.</li><li>تسليم الطرد عبر شركة التوصيل.</li>
+  <li>إحصائيات داخلية لتحسين الخدمة.</li></ul>
+  <h3>ما لا نفعله</h3><ul><li>لا نبيع بياناتك ولا نشاركها مع أي طرف خارج شركة التوصيل.</li>
+  <li>لا نطلب أي معلومات بنكية — الدفع نقداً عند الاستلام فقط.</li></ul>
+  <h3>ملفات تعريف الارتباط</h3><p>نستعمل أدوات قياس (Facebook Pixel، TikTok Pixel) لمعرفة فعالية إعلاناتنا. يمكنك تعطيلها من إعدادات متصفحك.</p>
+  <h3>حقوقك</h3><p>يمكنك طلب حذف بياناتك في أي وقت عبر واتساب 0542248858.</p>`,
+  fr:`<h1>Politique de confidentialité</h1><p>Nous collectons uniquement les informations nécessaires à la livraison : nom, téléphone, wilaya, commune et adresse. Elles ne sont jamais vendues ni partagées en dehors du transporteur. Aucune donnée bancaire n'est demandée — paiement à la livraison uniquement. Suppression de vos données sur demande : WhatsApp 0542248858.</p>`,
+  en:`<h1>Privacy policy</h1><p>We collect only what delivery requires: name, phone, wilaya, commune and address. Your data is never sold or shared outside the courier. No banking details are requested — cash on delivery only. To have your data deleted, message WhatsApp 0542248858.</p>`},
+ returns:{
+  ar:`<h1>سياسة الاستبدال والإرجاع</h1>
+  <h3>المعاينة عند الاستلام</h3><p>لك الحق في فتح الطرد ومعاينة المنتج أمام عامل التوصيل قبل الدفع. إذا لم يطابق المنتج الوصف، يمكنك رفضه دون دفع ثمنه.</p>
+  <h3>الاستبدال</h3><ul><li>المدة: 48 ساعة من تاريخ الاستلام.</li>
+  <li>الشرط: المنتج في حالته الأصلية مع التغليف الكامل.</li>
+  <li>في حالة عيب مصنعي: الاستبدال ومصاريف الإرجاع على عاتقنا.</li>
+  <li>في حالة تغيير الرأي: مصاريف الإرجاع على عاتق الزبون.</li></ul>
+  <h3>المنتجات غير القابلة للإرجاع</h3><p>المنتجات الشخصية المفتوحة (سماعات داخل الأذن، مستحضرات التجميل) لأسباب صحية.</p>
+  <h3>كيف تطلب الاستبدال</h3><p>تواصل معنا عبر واتساب 0542248858 مع رقم الطلب وصورة للمنتج.</p>`,
+  fr:`<h1>Échange et retour</h1><p>Vous pouvez ouvrir et vérifier le colis devant le livreur avant de payer. Échange sous 48 h, produit dans son emballage d'origine. Défaut de fabrication : frais à notre charge. Changement d'avis : frais de retour à votre charge. Contact : WhatsApp 0542248858.</p>`,
+  en:`<h1>Returns & exchange</h1><p>You may open and inspect the parcel before paying. Exchange within 48 hours, product in original packaging. Manufacturing defect: we cover return costs. Change of mind: you cover them. Contact: WhatsApp 0542248858.</p>`}
+};
+function viewPolicy(){
+  const k = S.productId==='returns' ? 'returns' : 'privacy';
+  return `<button class="btn btn-ghost btn-sm" onclick="go('home')" style="margin-bottom:14px">← ${t('back')}</button>
+    <article class="card desc-html" style="padding:28px; max-width:760px; margin:0 auto">
+      ${POLICY[k][LANG]||POLICY[k].ar}</article>`;
+}
+function viewSuccess(){
+  const o=S.lastOrder||{};
+  const msg=encodeURIComponent(`${o.ref||''} — ${o.productName||''} × ${o.qty||1}`);
+  return `<div class="card" style="padding:40px 24px; text-align:center; max-width:560px; margin:40px auto">
+    <div style="font-size:3rem">🎉</div>
+    <h1 style="font-size:1.5rem; margin:12px 0 8px">${t('successTitle')}</h1>
+    <p class="muted">${t('successBody')} <b style="color:var(--ink)">${esc(o.ref||'')}</b></p>
+    <div class="card" style="padding:16px; margin:18px 0; text-align:start; box-shadow:none; background:var(--surface-2)">
+      <div style="display:flex; justify-content:space-between"><span class="muted">${t('product')}</span><b>${esc(o.productName||'')} ×${o.qty||1}</b></div>
+      <div style="display:flex; justify-content:space-between"><span class="muted">${t('wilaya')}</span><b>${esc(o.wilaya||'')} / ${esc(o.commune||'')}</b></div>
+      <div style="display:flex; justify-content:space-between"><span class="muted">${t('total')}</span><b class="price" style="color:var(--accent)">${money(o.total||0)}</b></div>
+    </div>
+    <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap">
+      <button class="btn btn-primary" onclick="go('home')">${t('keepShopping')}</button>
+      <a class="btn btn-ghost" target="_blank" rel="noopener" href="https://wa.me/${esc(S.settings.whatsapp)}?text=${msg}">${t('contactWa')}</a>
+    </div></div>`;
+}
+/* --------------------------- 7. Admin panel ---------------------------- */
+function viewAdmin(){
+  if(!S.admin) return `
+    <div class="card" style="padding:34px 26px; max-width:420px; margin:48px auto; text-align:center">
+      <div class="logo-mark" style="margin:0 auto 14px">ZN</div>
+      <h1 style="font-size:1.25rem; margin-bottom:6px">${t('adminLogin')}</h1>
+      <p class="muted" style="font-size:.85rem; margin:0 0 18px">${S.cloud?t('cloudOn'):t('cloudOff')}</p>
+      <input class="field" id="a_pass" type="password" placeholder="${t('password')}"
+        onkeydown="if(event.key==='Enter')tryLogin()" style="text-align:center">
+      <button class="btn btn-primary" style="width:100%; margin-top:12px" onclick="tryLogin()">${t('login')}</button>
+      <button class="btn btn-ghost btn-sm" style="margin-top:10px" onclick="go('home')">${t('back')}</button>
+    </div>`;
+  const tabs=[["products",t('tabProducts')],["orders",t('tabOrders')],["shipping",t('tabShipping')],["ai",t('tabAI')],["settings",t('tabSettings')]];
+  return `
+  <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:14px">
+    <h1 style="font-size:1.35rem">${t('admin')}</h1>
+    <span class="badge" style="${S.cloud?'':'background:var(--accent-soft); color:var(--accent)'}">
+      ${S.cloud?'☁︎ '+t('cloudOn'):'⚠︎ '+t('cloudOff')}</span>
+    <div style="flex:1"></div>
+    <button class="btn btn-ghost btn-sm" onclick="go('home')">${t('back')}</button>
+    <button class="btn btn-ghost btn-sm" onclick="S.admin=false;go('home')">${t('logout')}</button>
+  </div>
+  <div class="tabs" style="margin-bottom:18px">
+    ${tabs.map(([k,lbl])=>`<button aria-selected="${S.tab===k}" onclick="S.tab='${k}';render()">${lbl}</button>`).join('')}
+  </div>
+  ${S.tab==='products'?tabProducts():S.tab==='orders'?tabOrders():S.tab==='shipping'?tabShipping():S.tab==='ai'?tabAI():tabSettings()}`;
+}
+function tryLogin(){
+  const v=document.getElementById('a_pass').value;
+  if(v===S.settings.adminPass){ S.admin=true; if(alertOn()){ unlockAudio(); requestWake(); } render(); } else toast(t('wrongPass'));
+}
+
+/* ---- products tab ---- */
+function storeIds(){
+  return [...new Set(['main', STORE_ID, ...Object.keys(S.layouts||{})])];
+}
+function tabProducts(){
+  const sid = S.editStore || STORE_ID;
+  const lay = layoutOf(sid);
+  const list = sortByLayout(S.products, sid);
+  const url = location.origin + location.pathname + '?s=' + sid;
+  return `<div class="card" style="padding:12px 14px; margin-bottom:14px; display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+    <b>🏪 النسخة</b>
+    <select class="field" style="max-width:190px" onchange="S.editStore=this.value; render()">
+      ${storeIds().map(i=>`<option value="${esc(i)}" ${i===sid?'selected':''}>${esc(i)}${i===STORE_ID?' (هذه)':''}</option>`).join('')}
+    </select>
+    <button class="btn btn-sm btn-ghost" onclick="newStore()">+ نسخة جديدة</button>
+    <button class="btn btn-sm btn-ghost" onclick="copyLayout()">⧉ نسخ الترتيب من نسخة</button>
+    <span class="muted" style="font-size:.78rem; direction:ltr">${esc(url)}</span>
+    <div class="muted" style="font-size:.78rem; flex-basis:100%">الترتيب والمنتج المميز يخصان هذه النسخة فقط · المنتجات نفسها مشتركة بين كل النسخ.</div>
+  </div>
+  <div style="display:flex; gap:10px; margin-bottom:14px; flex-wrap:wrap">
+    <button class="btn btn-primary" onclick="openProduct()">+ ${t('addProduct')}</button>
+    <span class="muted" style="align-self:center; font-size:.85rem">${S.products.length} · ${t('products')}</span></div>
+  <div class="card scroll-x" style="padding:6px 12px"><table class="tbl">
+    <thead><tr><th>#</th><th></th><th>${t('name')}</th><th>${t('category')}</th><th>${t('priceL')}</th><th>${t('stock')}</th>
+      <th>${t('isFeatured')}</th><th>${t('active')}</th><th>${t('actions')}</th></tr></thead>
+    <tbody>${list.map((p,i)=>`<tr>
+      <td style="white-space:nowrap">
+        <button class="btn btn-sm btn-ghost" ${i===0?'disabled':''} onclick="moveProduct('${p.id}','top')" title="الأول">⤒</button>
+        <button class="btn btn-sm btn-ghost" ${i===0?'disabled':''} onclick="moveProduct('${p.id}',-1)">▲</button>
+        <button class="btn btn-sm btn-ghost" ${i===list.length-1?'disabled':''} onclick="moveProduct('${p.id}',1)">▼</button>
+        <span class="muted" style="font-size:.78rem">${i+1}</span>
+      </td>
+      <td><img src="${esc((p.images&&p.images[0])||ph('ZN',150))}" style="width:46px;height:46px;border-radius:12px;object-fit:cover"></td>
+      <td><b>${esc(L(p.name))}</b><div class="muted" style="font-size:.74rem">${p.id}</div></td>
+      <td><span class="badge">${catIcon(p.category)} ${esc(catLabel(p.category)||catLabel('other'))}</span></td>
+      <td class="price">${money(p.price)}${p.oldPrice?`<div class="muted strike" style="font-size:.72rem">${money(p.oldPrice)}</div>`:''}</td>
+      <td>${p.stock??'—'}</td>
+      <td><input type="radio" name="feat" ${lay.featuredId===p.id?'checked':''} onchange="setFeatured('${p.id}')" style="accent-color:var(--brand)"></td>
+      <td><input type="checkbox" ${p.active!==false?'checked':''} onchange="toggleActive('${p.id}',this.checked)" style="accent-color:var(--brand)"></td>
+      <td style="white-space:nowrap">
+        <button class="btn btn-sm btn-ghost" onclick="openProduct('${p.id}')">${t('edit')}</button>
+        <button class="btn btn-sm" style="background:var(--accent-soft); color:var(--accent)" onclick="askDelete('${p.id}')">${t('del')}</button>
+      </td></tr>`).join('')||`<tr><td colspan="9" class="muted" style="padding:24px">${t('noProducts')}</td></tr>`}
+    </tbody></table></div>`;
+}
+async function moveProduct(id, dir){
+  const sid = S.editStore || STORE_ID;
+  const ids = sortByLayout(S.products, sid).map(p=>p.id);
+  const i = ids.indexOf(id); if(i<0) return;
+  const j = dir==='top' ? 0 : i+dir;
+  if(j<0 || j>=ids.length) return;
+  ids.splice(i,1); ids.splice(j,0,id);
+  S.layouts[sid] = {...layoutOf(sid), order:ids};
+  render();
+  if(await saveLayout(sid)) toast(t('saved'));
+}
+async function setFeatured(id){
+  const sid = S.editStore || STORE_ID;
+  S.layouts[sid] = {...layoutOf(sid), featuredId:id};
+  if(await saveLayout(sid)) toast(t('saved'));
+}
+async function newStore(){
+  const v = (prompt('معرّف النسخة الجديدة (أحرف إنجليزية صغيرة وأرقام، مثال: shop2)')||'').toLowerCase().replace(/[^a-z0-9_-]/g,'').slice(0,30);
+  if(!v) return;
+  if(!S.layouts[v]){
+    const base = layoutOf(S.editStore || STORE_ID);
+    S.layouts[v] = {order:[...(base.order||[])], featuredId:base.featuredId||null};
+    await saveLayout(v);
+  }
+  S.editStore = v; render();
+}
+async function copyLayout(){
+  const sid = S.editStore || STORE_ID;
+  const from = (prompt('انسخ الترتيب من أي نسخة؟ المتاحة: '+storeIds().filter(i=>i!==sid).join(' , '))||'').toLowerCase().trim();
+  if(!from || from===sid || !S.layouts[from]) return;
+  S.layouts[sid] = {order:[...(S.layouts[from].order||[])], featuredId:S.layouts[from].featuredId||null};
+  if(await saveLayout(sid)){ toast(t('saved')); render(); }
+}
+async function toggleActive(id,v){ const p=byId(id); p.active=v; await saveProduct({...p}); toast(t('saved')); }
+function askDelete(id){ if(confirm(t('confirmDel'))) removeProduct(id).then(ok=>{ if(ok) toast(t('deleted')); render(); }); }
+
+let DRAFT=null;
+function openProduct(id){
+  const p = id ? JSON.parse(JSON.stringify(byId(id))) :
+    {name:{ar:"",fr:"",en:""}, desc:{ar:"",fr:"",en:""}, price:0, oldPrice:0, images:[], stock:0, sold:0, active:true, category:"other"};
+  DRAFT=p;
+  document.getElementById('modalHost').innerHTML = `
+  <div class="modal" onclick="if(event.target===this)closeModal()"><div class="modal-panel" style="padding:24px">
+    <h2 style="font-size:1.15rem; margin-bottom:16px">${id?t('edit'):t('addProduct')}</h2>
+    <div style="display:grid; gap:14px">
+      <div><label class="lbl">${t('name')} (AR / FR / EN)</label>
+        <input class="field" id="d_nar" placeholder="عربي" value="${esc(p.name.ar||'')}">
+        <input class="field" id="d_nfr" placeholder="Français" style="margin-top:8px" value="${esc(p.name.fr||'')}">
+        <input class="field" id="d_nen" placeholder="English" style="margin-top:8px" value="${esc(p.name.en||'')}"></div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
+        <div><label class="lbl">${t('priceL')}</label><input class="field" id="d_price" type="number" min="0" value="${p.price||0}"></div>
+        <div><label class="lbl">${t('oldPrice')}</label><input class="field" id="d_old" type="number" min="0" value="${p.oldPrice||0}"></div>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
+        <div><label class="lbl">${t('stock')}</label><input class="field" id="d_stock" type="number" min="0" value="${p.stock||0}"></div>
+        <div><label class="lbl">${t('sold')}</label><input class="field" id="d_sold" type="number" min="0" value="${p.sold||0}"></div>
+      </div>
+      <div><label class="lbl">${t('category')}</label>
+        <select class="field" id="d_cat">
+          ${CATS.map(c=>`<option value="${c.id}" ${p.category===c.id?'selected':''}>${c.icon} ${esc(L(c.label))}</option>`).join('')}
+        </select></div>
+      <div><label class="lbl">${t('images')}</label>
+        <div id="d_imgs" style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px">${imgChips()}</div>
+        <input type="file" accept="image/*" multiple id="d_file" class="field" onchange="uploadImgs(this)">
+        <div style="display:flex; gap:8px; margin-top:8px">
+          <input class="field" id="d_url" placeholder="https://… (URL)">
+          <button class="btn btn-ghost btn-sm" onclick="addImgUrl()">+</button></div>
+      </div>
+      <div><label class="lbl">${t('descHtml')} — AR</label><textarea class="field" id="d_dar" rows="5">${esc(p.desc.ar||'')}</textarea></div>
+      <details><summary class="muted" style="cursor:pointer; font-size:.85rem">FR / EN</summary>
+        <textarea class="field" id="d_dfr" rows="4" style="margin-top:8px" placeholder="Description FR">${esc(p.desc.fr||'')}</textarea>
+        <textarea class="field" id="d_den" rows="4" style="margin-top:8px" placeholder="Description EN">${esc(p.desc.en||'')}</textarea></details>
+      <label style="display:flex; gap:8px; align-items:center"><input type="checkbox" id="d_active" ${p.active!==false?'checked':''} style="accent-color:var(--brand)"> ${t('active')}</label>
+    </div>
+    <div style="display:flex; gap:10px; margin-top:20px">
+      <button class="btn btn-primary" style="flex:1" onclick="commitProduct('${id||''}')">${t('save')}</button>
+      <button class="btn btn-ghost" onclick="closeModal()">${t('cancel')}</button>
+    </div>
+  </div></div>`;
+}
+function imgChips(){
+  /* the box is fixed (76×76) but the photo itself keeps its own ratio and sits
+     fully visible inside it (object-fit:contain + neutral background) instead
+     of being cropped/stretched to fill a square — so any portrait, landscape
+     or square product photo adapts cleanly to the same designated slot. */
+  return (DRAFT.images||[]).map((src,i)=>`<div style="position:relative">
+    <div style="width:76px;height:76px;border-radius:12px;border:1px solid var(--line);background:var(--surface-2);
+      overflow:hidden; display:flex; align-items:center; justify-content:center">
+      <img src="${esc(src)}" style="max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain">
+    </div>
+    <button onclick="DRAFT.images.splice(${i},1);document.getElementById('d_imgs').innerHTML=imgChips()"
+      style="position:absolute;top:-6px;inset-inline-end:-6px;width:22px;height:22px;border-radius:50%;border:0;background:var(--accent);color:#fff;cursor:pointer">×</button>
+  </div>`).join('') || `<span class="muted" style="font-size:.8rem">—</span>`;
+}
+function addImgUrl(){
+  const u=document.getElementById('d_url').value.trim(); if(!u) return;
+  DRAFT.images.push(u); document.getElementById('d_url').value='';
+  document.getElementById('d_imgs').innerHTML=imgChips();
+}
+function cloudinaryReady(){
+  const c=window.CLOUDINARY||{};
+  return c.CLOUD_NAME && c.UPLOAD_PRESET && !c.CLOUD_NAME.includes('PASTE');
+}
+/** Uploads one file to Cloudinary (unsigned) and returns a permanent, light-weight URL —
+ *  nothing but that short URL string is ever stored in Firestore. */
+async function uploadToCloudinary(file){
+  const c=window.CLOUDINARY;
+  const fd=new FormData();
+  fd.append('file', file);
+  fd.append('upload_preset', c.UPLOAD_PRESET);
+  fd.append('folder', 'zoubirnasrishop');
+  const res=await fetch(`https://api.cloudinary.com/v1_1/${c.CLOUD_NAME}/image/upload`, {method:'POST', body:fd});
+  const data=await res.json();
+  if(data.error) throw new Error(data.error.message);
+  // f_auto,q_auto: Cloudinary serves an optimized, auto-compressed format to each visitor
+  return data.secure_url.replace('/upload/', '/upload/f_auto,q_auto,w_1200/');
+}
+async function uploadImgs(input){
+  const useCloud = cloudinaryReady();
+  const bar=document.getElementById('d_imgs');
+  for(const file of input.files){
+    const tempId = 'up_'+Math.random().toString(36).slice(2);
+    bar.insertAdjacentHTML('beforeend', `<div class="skel" id="${tempId}" style="width:76px;height:76px;border-radius:12px"></div>`);
+    try{
+      const url = useCloud ? await uploadToCloudinary(file) : await compress(file);
+      DRAFT.images.push(url);
+      if(!useCloud) toast('⚠︎ Cloudinary غير مُفعّل — تم الحفظ محلياً (أثقل). راجع الإعدادات.');
+    }catch(e){
+      try{ DRAFT.images.push(await compress(file)); toast('⚠︎ Cloudinary: '+e.message+' — تم الحفظ محلياً بدلاً منه'); }
+      catch(_){ toast('⚠︎ فشل رفع الصورة'); }
+    }
+    document.getElementById(tempId)?.remove();
+  }
+  input.value=''; document.getElementById('d_imgs').innerHTML=imgChips();
+}
+function compress(file, max=1000, q=.72){
+  return new Promise((res,rej)=>{
+    const r=new FileReader();
+    r.onload=()=>{ const im=new Image();
+      im.onload=()=>{ const sc=Math.min(1,max/Math.max(im.width,im.height));
+        const c=document.createElement('canvas'); c.width=im.width*sc; c.height=im.height*sc;
+        c.getContext('2d').drawImage(im,0,0,c.width,c.height); res(c.toDataURL('image/jpeg',q)); };
+      im.onerror=rej; im.src=r.result; };
+    r.onerror=rej; r.readAsDataURL(file);
+  });
+}
+function closeModal(){ document.getElementById('modalHost').innerHTML=''; }
+async function commitProduct(id){
+  const g=i=>document.getElementById(i).value;
+  const p={...DRAFT, id:id||undefined,
+    name:{ar:g('d_nar'),fr:g('d_nfr')||g('d_nar'),en:g('d_nen')||g('d_nar')},
+    desc:{ar:g('d_dar'),fr:g('d_dfr')||g('d_dar'),en:g('d_den')||g('d_dar')},
+    price:Number(g('d_price'))||0, oldPrice:Number(g('d_old'))||0,
+    stock:Number(g('d_stock'))||0, sold:Number(g('d_sold'))||0,
+    category:g('d_cat')||'other',
+    active:document.getElementById('d_active').checked};
+  if(!p.name.ar) return toast(t('required'));
+  const nid=await saveProduct(p);
+  if(!DB){ /* local list already updated */ }
+  else { const i=S.products.findIndex(x=>x.id===nid); const rec={...p,id:nid};
+         if(i>=0) S.products[i]=rec; else S.products.push(rec); }
+  closeModal(); toast(t('saved')); render();
+}
+
+/* ---- orders tab ---- */
+const ST=["pending","confirmed","shipped","done","cancelled"];
+const stLabel=s=>({pending:t('stPending'),confirmed:t('stConfirmed'),shipped:t('stShipped'),done:t('stDone'),cancelled:t('stCancel')}[s]||s);
+const STAT_COLOR={pending:"#B75C00", confirmed:"#1449C7", shipped:"#6D28D9", done:"#0B7A3B", cancelled:"#C81E3A"};
+function dayStart(d){ const x=new Date(d); x.setHours(0,0,0,0); return x; }
+function dayEnd(d){ const x=new Date(d); x.setHours(23,59,59,999); return x; }
+function filterOrdersByDate(orders, f){
+  if(!f || f.mode==='all') return orders;
+  if(f.mode==='today'){
+    const s=dayStart(new Date()), e=dayEnd(new Date());
+    return orders.filter(o=>{ const d=new Date(o.createdAt); return d>=s && d<=e; });
+  }
+  if(f.mode==='range' && f.from && f.to){
+    const s=dayStart(f.from), e=dayEnd(f.to);
+    return orders.filter(o=>{ const d=new Date(o.createdAt); return d>=s && d<=e; });
+  }
+  return orders;
+}
+function setOrderFilter(mode){ S.orderFilter={...(S.orderFilter||{}), mode}; render(); }
+function applyOrderRange(){
+  const from=document.getElementById('of_from')?.value, to=document.getElementById('of_to')?.value;
+  if(!from || !to) return toast(t('filterPickDates'));
+  S.orderFilter={mode:'range', from, to}; render();
+}
+function tabOrders(){
+  const f = S.orderFilter || {mode:'all', from:'', to:''};
+  const filtered = filterOrdersByDate(S.orders, f);
+  const ls = ensureStats();     // lifetime counters — independent of the date filter and of deletions
+  const stats=[
+    ["📦", t('orderNo'), ls.count||0, "var(--brand)"],
+    ["⏳", t('stPending'), ls.pending||0, STAT_COLOR.pending],
+    ["✅", t('stConfirmed'), ls.confirmed||0, STAT_COLOR.confirmed],
+    ["🚚", t('stDone'), ls.done||0, STAT_COLOR.done],
+    ["❌", t('stCancel'), ls.cancelled||0, STAT_COLOR.cancelled],
+    ["💰", t('total'), money(ls.revenue||0), "var(--gold)"],
+  ];
+  return `<div class="filter-bar">
+    <div class="seg">
+      <button class="${f.mode==='all'?'on':''}" onclick="setOrderFilter('all')">${t('filterAll')}</button>
+      <button class="${f.mode==='today'?'on':''}" onclick="setOrderFilter('today')">${t('filterToday')}</button>
+    </div>
+    <span class="muted" style="font-size:.82rem">${t('filterFrom')}</span>
+    <input type="date" id="of_from" value="${esc(f.from||'')}">
+    <span class="muted" style="font-size:.82rem">${t('filterTo')}</span>
+    <input type="date" id="of_to" value="${esc(f.to||'')}">
+    <button class="btn btn-ghost btn-sm" onclick="applyOrderRange()">${t('filterApply')}</button>
+  </div>
+  <div class="stat-grid">
+    ${stats.map(([icon,label,val,color])=>`<div class="stat-card" style="--stat-c:${color}">
+        <span class="stat-icon">${icon}</span>
+        <div class="stat-label">${label}</div>
+        <div class="stat-value">${val}</div>
+      </div>`).join('')}
+  </div>
+  <p class="muted" style="font-size:.76rem; margin:-8px 0 14px; display:flex; align-items:center; gap:10px; flex-wrap:wrap">
+    <span>ⓘ ${t('statsNote')}</span>
+    <button class="btn-link" style="font-size:.76rem; color:var(--accent); background:none; border:0; padding:0; cursor:pointer; text-decoration:underline"
+      onclick="resetStats()">${t('resetStats')}</button>
+  </p>
+  <div style="display:flex; gap:10px; margin-bottom:14px; flex-wrap:wrap">
+    <a class="btn btn-primary" href="${esc(S.settings.sheetUrl||'')}" target="_blank" rel="noopener">📄 ${t('openSheet')}</a>
+    <button class="btn btn-ghost" onclick="exportCsv()">⬇ ${t('exportCsv')}</button>
+    <button class="btn btn-ghost" onclick="archiveSheets()">📊 ${t('archiveSheets')}</button>
+  </div>
+  <div class="card scroll-x" style="padding:6px 12px"><table class="tbl">
+    <thead><tr><th>${t('orderNo')}</th><th>${t('date')}</th><th>${t('customer')}</th><th>${t('product')}</th>
+      <th>${t('wilaya')}</th><th>${t('total')}</th><th>${t('status')}</th><th></th></tr></thead>
+    <tbody>${filtered.map(o=>`<tr>
+      <td><b>${esc(o.ref||o.id)}</b>${o.storeId?`<div class="muted" style="font-size:.7rem">🏪 ${esc(o.storeId)}</div>`:''}</td>
+      <td class="muted" style="font-size:.78rem">${new Date(o.createdAt).toLocaleString(LANG==='ar'?'ar-DZ':'fr-FR')}</td>
+      <td><b>${esc(o.customer)}</b><div><a href="tel:${esc(o.phone)}" style="font-size:.8rem;color:var(--brand)">${esc(o.phone)}</a></div>
+        <a class="muted" style="font-size:.74rem" target="_blank" rel="noopener" href="https://wa.me/213${esc(String(o.phone).replace(/^0/,''))}">WhatsApp</a></td>
+      <td>${esc(o.productName)} ×${o.qty}</td>
+      <td>${String(o.wilayaCode).padStart(2,'0')} ${esc(o.wilaya)}<div class="muted" style="font-size:.74rem">${esc(o.commune)} · ${o.deliveryType==='home'?t('home'):t('desk')}</div>
+        <div class="muted" style="font-size:.72rem">${esc(o.address||'')}</div></td>
+      <td class="price">${money(o.total)}<div class="muted" style="font-size:.72rem">+${money(o.shipping)}</div></td>
+      <td><select class="field" style="padding:6px 8px; font-size:.8rem; font-weight:800; border-color:${STAT_COLOR[o.status]||'var(--line)'}; color:${STAT_COLOR[o.status]||'var(--ink)'}" onchange="changeStatus('${o.id}',this.value)">
+        ${ST.map(s=>`<option value="${s}" ${o.status===s?'selected':''}>${stLabel(s)}</option>`).join('')}</select></td>
+      <td><button class="btn btn-sm" style="background:var(--accent-soft); color:var(--accent)" onclick="dropOrder('${o.id}')">${t('del')}</button></td>
+    </tr>`).join('')||`<tr><td colspan="8" class="muted" style="padding:24px">${t('noOrders')}</td></tr>`}
+    </tbody></table></div>`;
+}
+async function changeStatus(id,v){
+  const o=S.orders.find(x=>x.id===id); const old=o?o.status:null;
+  await updateOrder(id,{status:v, updatedAt:new Date().toISOString()});
+  if(o){ bumpStatsOnStatusChange(old, v, o.total); o.status=v; await saveSettings(); }
+  toast(t('saved'));
+}
+async function dropOrder(id){ if(!confirm(t('confirmDel')))return; const ok=await removeOrder(id); render(); if(ok) toast(t('deleted')); }
+
+function ordersTable(sep){
+  const head=["ref","date","customer","phone","phone2","wilaya_code","wilaya","commune","address",
+    "delivery","product","qty","unit_price","shipping","total","status","notes"];
+  const rows=S.orders.map(o=>[o.ref||o.id, o.createdAt, o.customer, o.phone, o.phone2||'',
+    o.wilayaCode, o.wilaya, o.commune, (o.address||'').replace(/[\r\n]+/g,' '),
+    o.deliveryType==='home'?'Domicile':'Bureau', o.productName, o.qty, o.unitPrice, o.shipping, o.total,
+    o.status, (o.notes||'').replace(/[\r\n]+/g,' ')]);
+  const q=v=>{ v=String(v==null?'':v); return sep===','? '"'+v.replace(/"/g,'""')+'"' : v; };
+  return [head.join(sep), ...rows.map(r=>r.map(q).join(sep))].join('\r\n');
+}
+async function exportCsv(){
+  const csv="\uFEFF"+ordersTable(",");              // UTF-8 BOM → Arabic opens correctly in Excel
+  const filename=`ZoubirNasriShop-orders-${new Date().toISOString().slice(0,10)}.csv`;
+  if(DOWNLOADS){ try{ await DOWNLOADS.save({filename, data:csv}); return toast('✅ '+t('exportCsv')); }catch(e){} }
+  try{ const a=document.createElement('a');
+    a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'})); a.download=filename; a.click();
+  }catch(e){ await navigator.clipboard.writeText(csv); toast(t('copied')); }
+}
+/* Sends rows to the Google Apps Script web app. `no-cors` means we never
+   read the reply — Apps Script does not send CORS headers — but the rows
+   do arrive in the sheet. */
+function pushSheet(orders){
+  const url = S.settings.sheetUrl || window.SHEETS_URL;
+  if(!url || !orders?.length) return;
+  const rows = orders.map(o=>[o.ref||o.id,
+    new Date(o.createdAt).toLocaleString('fr-DZ',{timeZone:'Africa/Algiers'}),
+    o.customer, o.phone, o.phone2||'', String(o.wilayaCode).padStart(2,'0'),
+    o.wilayaAr||o.wilaya, o.commune, o.address,
+    o.deliveryType==='home'?'المنزل':'المكتب',
+    o.productName, o.qty, o.unitPrice, o.shipping, o.total, o.status, o.notes||'']);
+  fetch(url,{method:'POST', mode:'no-cors',
+    headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body: JSON.stringify({token:'ZN', rows})}).catch(()=>{});
+}
+/* Each order is already sent to the sheet once, the moment it's created
+   (see pushSheet() call in addOrder, which sets o.sheetSynced) — that's the
+   live backup. Archiving only needs to (re-)send orders that were never
+   synced — e.g. created before a Sheets link existed, or a push that failed
+   — then clear everything out of the store; already-synced orders are only
+   deleted here, never re-pushed, so nothing ends up duplicated in the sheet. */
+async function archiveSheets(){
+  if(!S.orders.length) return toast('لا توجد طلبات لأرشفتها');
+  const url = S.settings.sheetUrl || window.SHEETS_URL;
+  if(url){
+    const notSynced = S.orders.filter(o=>!o.sheetSynced);
+    const msg = notSynced.length
+      ? `سيتم إرسال ${notSynced.length} طلبية غير مسجّلة بعد إلى Google Sheets، ثم حذف كل الطلبات (${S.orders.length}) من المتجر. هل أنت متأكد؟`
+      : `سيتم حذف ${S.orders.length} طلبية من المتجر (هي محفوظة أصلاً في Google Sheets منذ إنشائها). هل أنت متأكد؟`;
+    if(!confirm(msg)) return;
+    if(notSynced.length) pushSheet(notSynced);
+    const ok = await deleteAllOrders();
+    if(ok) toast('✅ تم حذف الطلبات من المتجر — نسختها محفوظة في Google Sheets');
+    return;
+  }
+  try{
+    await navigator.clipboard.writeText(ordersTable("\t"));
+    toast('📋 '+t('copied')+' → الصق الجدول في Google Sheets (Ctrl+V)');
+    if(confirm('هل قمت بلصق الجدول في Google Sheets؟ في حال الموافقة، سيتم حذف الطلبات من المتجر.')){
+      const ok = await deleteAllOrders();
+      if(ok) toast('✅ تم حذف الطلبات من المتجر');
+    }
+  }catch(e){ toast('⚠︎ '+e.message); }
+}
+async function deleteAllOrders(){
+  const ids = S.orders.map(o=>o.id);
+  let failed = 0;
+  for(const id of ids){
+    const ok = await removeOrder(id);
+    if(!ok) failed++;
+  }
+  if(S.tab==='orders') render();
+  if(failed){
+    toast(`⚠︎ تعذّر حذف ${failed} من أصل ${ids.length} طلبية — تأكد من نشر صلاحية الحذف (allow delete) في Firestore Rules`);
+    return false;
+  }
+  return true;
+}
+
+/* ---- shipping tab ---- */
+function tabShipping(){
+  return `<div class="card" style="padding:22px; margin-bottom:16px">
+    <h2 style="font-size:1.05rem; margin-bottom:12px">${t('globalRates')}</h2>
+    <div style="display:grid; grid-template-columns:1fr 1fr auto; gap:10px; align-items:end">
+      <div><label class="lbl">🏠 ${t('home')}</label><input class="field" id="g_home" type="number" value="${S.settings.globalHome}"></div>
+      <div><label class="lbl">🏢 ${t('desk')}</label><input class="field" id="g_desk" type="number" value="${S.settings.globalDesk}"></div>
+      <button class="btn btn-primary" onclick="applyGlobal()">${t('apply')}</button>
+    </div>
+    <p class="muted" style="font-size:.8rem; margin:10px 0 0">${t('customRates')} ↓</p>
+  </div>
+  <div class="card scroll-x" style="padding:6px 12px"><table class="tbl">
+    <thead><tr><th>#</th><th>${t('wilaya')}</th><th>🏠 ${t('home')}</th><th>🏢 ${t('desk')}</th></tr></thead>
+    <tbody>${DZ.map(w=>{ const r=S.settings.rates[String(w[0])]||{};
+      return `<tr><td class="muted">${String(w[0]).padStart(2,'0')}</td>
+        <td><b>${esc(w[1])}</b> <span class="muted">${esc(w[2])}</span></td>
+        <td><input class="field" style="padding:6px 10px; max-width:120px" type="number" placeholder="${S.settings.globalHome}"
+          value="${r.home??''}" onchange="setRate(${w[0]},'home',this.value)"></td>
+        <td><input class="field" style="padding:6px 10px; max-width:120px" type="number" placeholder="${S.settings.globalDesk}"
+          value="${r.desk??''}" onchange="setRate(${w[0]},'desk',this.value)"></td></tr>`;}).join('')}
+    </tbody></table></div>`;
+}
+async function applyGlobal(){
+  S.settings.globalHome=Number(document.getElementById('g_home').value)||0;
+  S.settings.globalDesk=Number(document.getElementById('g_desk').value)||0;
+  S.settings.rates={};                       // one price for the 58 wilayas
+  await saveSettings(); toast(t('saved')); render();
+}
+async function setRate(code,type,val){
+  const k=String(code); S.settings.rates[k]=S.settings.rates[k]||{};
+  if(val==='') delete S.settings.rates[k][type]; else S.settings.rates[k][type]=Number(val);
+  if(!Object.keys(S.settings.rates[k]).length) delete S.settings.rates[k];
+  await saveSettings(); toast(t('saved'));
+}
+
+/* ---- AI ad generator ---- */
+function tabAI(){
+  return `<div class="card" style="padding:22px">
+    <h2 style="font-size:1.1rem">${t('aiTitle')}</h2>
+    <p class="muted" style="font-size:.88rem; margin:4px 0 16px">${t('aiDesc')}</p>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:10px">
+      <div><label class="lbl">${t('product')}</label>
+        <select class="field" id="ai_p">${S.products.map(p=>`<option value="${p.id}">${esc(L(p.name))}</option>`).join('')}</select></div>
+      <div><label class="lbl">${t('aiPlatform')}</label>
+        <select class="field" id="ai_plat"><option>Facebook</option><option>TikTok</option><option>Instagram</option></select></div>
+      <div><label class="lbl">${t('aiTone')}</label>
+        <select class="field" id="ai_tone"><option value="hype">${t('toneHype')}</option>
+          <option value="trust">${t('toneTrust')}</option><option value="story">${t('toneStory')}</option></select></div>
+      <div><label class="lbl">${t('adLang')}</label>
+        <select class="field" id="ai_lang"><option value="ar">العربية / الدارجة</option><option value="fr">Français</option><option value="en">English</option></select></div>
+    </div>
+    <button class="btn btn-primary" id="aiBtn" style="margin-top:14px" onclick="genAd()">✨ ${t('aiGenerate')}</button>
+    <div id="ai_out" class="card" style="padding:18px; margin-top:16px; white-space:pre-wrap; box-shadow:none;
+      background:var(--surface-2); display:none; line-height:1.9"></div>
+    <button class="btn btn-ghost btn-sm hidden" id="aiCopy" style="margin-top:10px"
+      onclick="navigator.clipboard.writeText(document.getElementById('ai_out').textContent).then(()=>toast(t('copied')))">📋 ${t('aiCopy')}</button>
+  </div>`;
+}
+async function genAd(){
+  const p=byId(document.getElementById('ai_p').value); if(!p) return toast(t('noProducts'));
+  const plat=document.getElementById('ai_plat').value, tone=document.getElementById('ai_tone').value;
+  const lg=document.getElementById('ai_lang').value;
+  const out=document.getElementById('ai_out'), btn=document.getElementById('aiBtn');
+  if(!SAMPLE) return toast('⚠︎ AI unavailable in this view');
+  out.style.display='block'; out.textContent='…'; btn.disabled=true; btn.innerHTML=`<span class="spinner"></span> ${t('sending')}`;
+  const langName={ar:"Algerian Arabic (darija mixed with fus-ha, natural for Algerian buyers)",fr:"French",en:"English"}[lg];
+  const toneName={hype:"high-energy, urgent, emoji-rich",trust:"professional, reassuring, benefit-led",story:"short storytelling hook"}[tone];
+  const prompt=`You write ${plat} ads for an Algerian e-commerce store paying cash on delivery (COD).
+Product: ${L(p.name)}
+Price: ${p.price} DA${p.oldPrice?` (was ${p.oldPrice} DA)`:''}
+Details: ${stripTags(L(p.desc)).slice(0,700)}
+Store: ZoubirNasriShop — WhatsApp 0542248858, delivery to all 58 wilayas, payment on delivery.
+
+Write the ad in ${langName}, in a ${toneName} tone. Return exactly this structure, nothing else:
+1) three scroll-stopping headlines (max 8 words each)
+2) a primary ad text of 60–90 words with benefits as short lines
+3) one call to action mentioning cash on delivery and the phone number
+4) 12 hashtags suited to the Algerian market
+5) a 15-second video script idea in 3 shots.`;
+  try{
+    const r=await SAMPLE(prompt,{modelTier:"default", onText:({text})=>{ out.textContent=text; }});
+    out.textContent=r.text; document.getElementById('aiCopy').classList.remove('hidden');
+  }catch(e){ out.textContent='⚠︎ '+(e.code||e.message); }
+  btn.disabled=false; btn.innerHTML='✨ '+t('aiGenerate');
+}
+
+/* ---- settings tab ---- */
+function tabSettings(){
+  return `<div class="card" style="padding:22px; display:grid; gap:14px; max-width:620px">
+    <div><label class="lbl">${t('storeName')}</label><input class="field" id="st_name" value="${esc(S.settings.storeName)}"></div>
+    <div><label class="lbl">${t('adminPass')}</label><input class="field" id="st_pass" value="${esc(S.settings.adminPass)}"></div>
+    <div><label class="lbl">WhatsApp (213…)</label><input class="field" id="st_wa" value="${esc(S.settings.whatsapp)}"></div>
+    <div><label class="lbl">Facebook</label><input class="field" id="st_fb" value="${esc(S.settings.facebook)}"></div>
+    <div class="card" style="padding:14px; box-shadow:none; background:var(--surface-2); display:grid; gap:12px">
+      <b style="font-size:.85rem">📊 ${t('pixelsTitle')}</b>
+      <div><label class="lbl">${t('fbPixel')}</label>
+        <input class="field" id="st_fbpx" placeholder="1234567890123456" value="${esc(S.settings.fbPixel||'')}">
+        <p class="muted" style="font-size:.76rem; margin:6px 0 0">${t('fbPixelHelp')}</p></div>
+      <div><label class="lbl">${t('ttPixel')}</label>
+        <input class="field" id="st_ttpx" placeholder="C4A1B2C3D4E5F6G7H8I9" value="${esc(S.settings.ttPixel||'')}">
+        <p class="muted" style="font-size:.76rem; margin:6px 0 0">${t('ttPixelHelp')}</p></div>
+    </div>
+    <div><label class="lbl">${t('sheetUrl')}</label><input class="field" id="st_sheet" placeholder="https://script.google.com/macros/s/…/exec" value="${esc(S.settings.sheetUrl||'')}">
+      <p class="muted" style="font-size:.76rem; margin:6px 0 0">Google Apps Script — يعمل مباشرة في النسخة المستضافة على خادمك (Node/Express). داخل هذه المعاينة يتم نسخ الجدول إلى الحافظة بدل الإرسال.</p></div>
+    <div class="card" style="padding:14px; box-shadow:none; background:${alertOn()?'var(--brand-soft)':'var(--surface-2)'}; display:grid; gap:10px">
+      <b style="font-size:.85rem">🔔 إشعار صوتي للطلبات الجديدة ${alertOn()?'— مفعّل ✅':'— متوقف'}</b>
+      <p class="muted" style="font-size:.78rem; margin:0">رنّة + اهتزاز + إشعار نظام عند وصول طلب جديد، ما دامت لوحة التحكم مفتوحة ومسجَّل الدخول (الشاشة تبقى مضاءة تلقائياً). فعّله على كل جهاز تريد أن يرنّ. للإشعار والتطبيق مغلق: فعّل Telegram في google-apps-script.gs.</p>
+      <div style="display:flex; gap:10px; flex-wrap:wrap">
+        <button class="btn ${alertOn()?'btn-ghost':'btn-primary'}" onclick="toggleAlert()">${alertOn()?'إيقاف الإشعار':'🔔 تفعيل الإشعار الصوتي'}</button>
+        <button class="btn btn-ghost" onclick="unlockAudio();playChime(1)">▶︎ تجربة الصوت</button>
+      </div>
+    </div>
+    <div class="card" style="padding:14px; box-shadow:none; background:${cloudinaryReady()?'var(--brand-soft)':'var(--accent-soft)'}">
+      <b style="font-size:.85rem">${cloudinaryReady()?'☁︎ Cloudinary متصل — الصور تُخزَّن خارجياً':'⚠︎ Cloudinary غير مُفعّل — الصور تُخزَّن حالياً داخل قاعدة البيانات (أثقل)'}</b>
+      <p class="muted" style="font-size:.78rem; margin:6px 0 0">فعّله بتعديل <code>window.CLOUDINARY</code> في أعلى ملف index.html — التفاصيل في README.</p>
+    </div>
+    <div><label class="lbl">Anthropic API key (مولّد الإعلانات)</label>
+      <input class="field" id="st_ai" type="password" placeholder="sk-ant-…" value="${esc(localStorage.getItem('zn_aikey')||'')}">
+      <p class="muted" style="font-size:.76rem; margin:6px 0 0">يُحفظ في هذا المتصفح فقط ولا يظهر للزبائن. لا تضعه داخل ملف الموقع أبداً.</p></div>
+    <div style="display:flex; gap:10px">
+      <button class="btn btn-primary" onclick="commitSettings()">${t('save')}</button>
+      <button class="btn btn-ghost" onclick="toggleTheme()">🌓</button>
+    </div>
+  </div>`;
+}
+async function commitSettings(){
+  const g=i=>document.getElementById(i).value.trim();
+  const aik=g('st_ai');
+  if(aik){ localStorage.setItem('zn_aikey',aik); SAMPLE=makeSampler(aik); }
+  else { localStorage.removeItem('zn_aikey'); SAMPLE=null; }
+  Object.assign(S.settings,{storeName:g('st_name'),adminPass:g('st_pass')||S.settings.adminPass,
+    whatsapp:g('st_wa'),facebook:g('st_fb'),sheetUrl:g('st_sheet'),
+    fbPixel:g('st_fbpx'),ttPixel:g('st_ttpx')});
+  await saveSettings(); loadPixels(); toast(t('saved')); render();
+}
+function toggleTheme(){
+  const cur=document.documentElement.getAttribute('data-theme');
+  document.documentElement.setAttribute('data-theme', cur==='dark'?'light':'dark');
+  localStorage.setItem('zn_theme', document.documentElement.getAttribute('data-theme'));
+}
+function wireAdmin(){ const p=document.getElementById('a_pass'); if(p) p.focus(); }
+
+/* ------------------------------- 8. Boot -------------------------------- */
+document.getElementById('yr').textContent=new Date().getFullYear();
+document.getElementById('langPill').addEventListener('click',e=>{
+  const b=e.target.closest('button[data-lang]'); if(b) setLang(b.dataset.lang);
+});
+try{ const th=localStorage.getItem('zn_theme'); if(th) document.documentElement.setAttribute('data-theme',th); }catch(e){}
+document.documentElement.lang=LANG; document.documentElement.dir=I18N[LANG].dir;
+document.querySelectorAll('#langPill button').forEach(b=>b.setAttribute('aria-pressed', b.dataset.lang===LANG));
+document.querySelectorAll('[data-i18n]').forEach(e=>e.textContent=t(e.dataset.i18n));
+document.getElementById('tagline').textContent=t('tagline');
+render();
+initCloud();
+</script>
+
+</body>
+</html>
